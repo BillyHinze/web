@@ -1,559 +1,692 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AeroScope Pro | Aviation Operations Portal</title>
-  <meta name="description" content="A comprehensive aviation portal with weather, NOTAMs, planning, airport status, fleet, and alerts." />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            skyglass: 'rgba(255,255,255,0.06)',
-            opsbg: '#0b1120'
-          }
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Portal Dashboard</title>
+  <meta name="description" content="A polished school dashboard built with Bootstrap 5.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #072d57;
+      --navy-dark: #04213f;
+      --accent: #18a999;
+      --soft: #f5f7fb;
+      --card-shadow: 0 18px 40px rgba(10, 35, 66, 0.12);
+    }
+
+    body {
+      background: var(--soft);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .sidebar {
+      width: 290px;
+      min-height: 100vh;
+      background: linear-gradient(180deg, var(--navy), var(--navy-dark));
+      color: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1030;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar .brand {
+      padding: 28px 24px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .sidebar .brand img {
+      width: 120px;
+      max-width: 100%;
+      display: block;
+      margin: 0 auto 12px;
+    }
+
+    .sidebar .section-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      padding: 18px 24px 8px;
+    }
+
+    .sidebar a {
+      color: rgba(255,255,255,0.93);
+      text-decoration: none;
+    }
+
+    .sidebar .nav-link {
+      padding: 12px 24px;
+      border-radius: 0;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    .content {
+      margin-left: 290px;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: #fff;
+      box-shadow: 0 1px 0 rgba(9, 30, 66, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1020;
+    }
+
+    .glass-card,
+    .info-card,
+    .news-card,
+    .timetable-card {
+      border: 0;
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .hero-banner {
+      background: linear-gradient(90deg, #0f9b8e, #1f6fb2);
+      color: #fff;
+      border-radius: 22px;
+      overflow: hidden;
+      min-height: 170px;
+      position: relative;
+    }
+
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 70% 40%, rgba(255,255,255,0.18), transparent 24%),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,0.12), transparent 18%);
+      pointer-events: none;
+    }
+
+    .hero-banner .banner-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .quick-link {
+      border-radius: 20px;
+      border: 1px solid rgba(9, 30, 66, 0.08);
+      background: #fff;
+      box-shadow: var(--card-shadow);
+      height: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .quick-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 40px rgba(10, 35, 66, 0.16);
+    }
+
+    .quick-link .icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      color: var(--navy);
+      background: linear-gradient(180deg, #eaf4ff, #dceeff);
+      margin: 0 auto 12px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: #23364d;
+      letter-spacing: 0.01em;
+    }
+
+    .timetable-day {
+      min-height: 100%;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid rgba(9, 30, 66, 0.08);
+      padding: 16px;
+    }
+
+    .lesson {
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border-left: 6px solid transparent;
+    }
+
+    .lesson.green { background: #dff7ef; border-left-color: #20b67a; }
+    .lesson.blue { background: #e3efff; border-left-color: #4f8df7; }
+    .lesson.pink { background: #ffe1f2; border-left-color: #e44faa; }
+    .lesson.yellow { background: #fff5cb; border-left-color: #e0b11d; }
+    .lesson.teal { background: #d6f5f0; border-left-color: #14a0a0; }
+    .lesson.violet { background: #eadfff; border-left-color: #8c6ff0; }
+
+    .badge-soft {
+      border-radius: 999px;
+      padding: 0.45rem 0.75rem;
+      background: rgba(24, 169, 153, 0.12);
+      color: #0e7b70;
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+
+    .tab-pane-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(9, 30, 66, 0.08);
+    }
+
+    @media (max-width: 991.98px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      .content {
+        margin-left: 0;
       }
     }
-  </script>
+  </style>
 </head>
-<body class="min-h-screen bg-opsbg text-slate-100 antialiased">
-  <header class="sticky top-0 z-50 border-b border-white/10 bg-opsbg/85 backdrop-blur">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-      <div class="flex items-center gap-3">
-        <div class="grid h-10 w-10 place-items-center rounded-2xl bg-cyan-400 text-slate-950 font-black">A</div>
-        <div>
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">AeroScope Pro</p>
-          <p class="text-xs text-slate-400">Aviation operations portal</p>
-        </div>
+<body>
+  <aside id="sidebar" class="sidebar">
+    <div class="brand text-center">
+      <div class="mb-3">
+        <div class="mx-auto d-grid place-items-center rounded-circle bg-white text-primary fw-bold" style="width:80px;height:80px;font-size:2rem;">M</div>
       </div>
-      <nav class="hidden items-center gap-6 md:flex text-sm text-slate-300">
-        <a href="#airport" class="hover:text-cyan-300">Airport</a>
-        <a href="#notam" class="hover:text-cyan-300">NOTAM</a>
-        <a href="#weather" class="hover:text-cyan-300">Weather</a>
-        <a href="#planner" class="hover:text-cyan-300">Planner</a>
-        <a href="#airport-status" class="hover:text-cyan-300">Status</a>
-        <a href="#fleet" class="hover:text-cyan-300">Fleet</a>
-        <a href="#contact" class="hover:text-cyan-300">Contact</a>
-      </nav>
-      <div class="flex items-center gap-3">
-        <button id="themeBtn" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Toggle accent</button>
-        <a href="#planner" class="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-300">Plan Flight</a>
-      </div>
+      <h2 class="h4 mb-0">My School</h2>
+      <div class="small opacity-75">Student Portal</div>
     </div>
-  </header>
 
-  <main>
-    <section class="relative overflow-hidden border-b border-white/10">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_40%),linear-gradient(180deg,rgba(15,23,42,0.4),rgba(2,6,23,1))]"></div>
-      <div class="relative mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-2 lg:items-center lg:py-28">
-        <div>
-          <span class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-300">Comprehensive aviation operations and planning</span>
-          <h1 class="mt-6 text-4xl font-black tracking-tight sm:text-6xl">A complete portal for pilots, dispatchers, and ops teams</h1>
-          <p class="mt-6 max-w-2xl text-lg text-slate-300">Search airports, review METAR and TAF data, read NOTAMs, plan routes with alternates, monitor runway and gate status, track fleet, and manage alerts.</p>
-          <div class="mt-8 flex flex-wrap gap-4">
-            <a href="#planner" class="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-300">Start planning</a>
-            <a href="#airport" class="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-semibold hover:bg-white/10">Search airports</a>
-          </div>
-          <div class="mt-10 grid gap-4 sm:grid-cols-3">
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p class="text-sm text-slate-400">Airports monitored</p>
-              <p class="mt-1 text-2xl font-bold">128</p>
+    <div class="section-label">Navigation</div>
+    <nav class="nav flex-column px-2">
+      <a class="nav-link active" href="#dashboard"><i class="bi bi-house-door me-2"></i>Dashboard</a>
+      <a class="nav-link" href="#classes"><i class="bi bi-mortarboard me-2"></i>My Classes</a>
+      <a class="nav-link" href="#groups"><i class="bi bi-people me-2"></i>My Groups</a>
+      <a class="nav-link" href="#work"><i class="bi bi-journal-check me-2"></i>Due Work</a>
+      <a class="nav-link" href="#grades"><i class="bi bi-graph-up me-2"></i>Grades</a>
+      <a class="nav-link" href="#timetable"><i class="bi bi-calendar3 me-2"></i>Timetable</a>
+      <a class="nav-link" href="#news"><i class="bi bi-newspaper me-2"></i>News</a>
+      <a class="nav-link" href="#email"><i class="bi bi-envelope me-2"></i>Email</a>
+    </nav>
+
+    <div class="section-label">Quick Links</div>
+    <nav class="nav flex-column px-2 pb-4">
+      <a class="nav-link" href="#"><i class="bi bi-card-list me-2"></i>Copyright Information</a>
+      <a class="nav-link" href="#"><i class="bi bi-book me-2"></i>Writing Guide</a>
+      <a class="nav-link" href="#"><i class="bi bi-shield-lock me-2"></i>Student Policies</a>
+      <a class="nav-link" href="#"><i class="bi bi-tools me-2"></i>Technical Services</a>
+      <a class="nav-link" href="#"><i class="bi bi-lightbulb me-2"></i>AI Guidelines</a>
+      <a class="nav-link" href="#"><i class="bi bi-cloud-arrow-up me-2"></i>Drive</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <header class="topbar">
+      <div class="container-fluid px-3 px-lg-4 py-2">
+        <div class="d-flex align-items-center gap-2">
+          <button id="menuBtn" class="btn btn-outline-primary d-lg-none"><i class="bi bi-list"></i></button>
+          <div class="ms-auto d-flex align-items-center gap-2 flex-wrap">
+            <div class="input-group d-none d-md-flex" style="width:280px;">
+              <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+              <input id="searchInput" type="text" class="form-control bg-light border-0" placeholder="Search portal">
             </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p class="text-sm text-slate-400">Dispatch readiness</p>
-              <p class="mt-1 text-2xl font-bold">99.2%</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p class="text-sm text-slate-400">Avg. update delay</p>
-              <p class="mt-1 text-2xl font-bold">18s</p>
-            </div>
-          </div>
-        </div>
-        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-cyan-950/20">
-          <div class="flex items-center justify-between border-b border-white/10 pb-4">
-            <div>
-              <p class="text-sm text-slate-400">Operational snapshot</p>
-              <h2 class="text-2xl font-bold">Today at a glance</h2>
-            </div>
-            <span class="rounded-full bg-emerald-400/15 px-3 py-1 text-sm text-emerald-300">System nominal</span>
-          </div>
-          <div class="mt-5 grid gap-4 sm:grid-cols-2">
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4">
-              <p class="text-sm text-slate-400">Departures</p>
-              <p class="mt-2 text-3xl font-black">42</p>
-              <p class="mt-1 text-sm text-emerald-300">+6 on schedule</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4">
-              <p class="text-sm text-slate-400">Arrivals</p>
-              <p class="mt-2 text-3xl font-black">39</p>
-              <p class="mt-1 text-sm text-cyan-300">2 delayed by weather</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4">
-              <p class="text-sm text-slate-400">Runways active</p>
-              <p class="mt-2 text-3xl font-black">2/4</p>
-              <p class="mt-1 text-sm text-slate-300">Primary east flow</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4">
-              <p class="text-sm text-slate-400">Fuel uplift</p>
-              <p class="mt-2 text-3xl font-black">87%</p>
-              <p class="mt-1 text-sm text-slate-300">Average today</p>
-            </div>
+            <button class="btn btn-light position-relative">
+              <i class="bi bi-bell"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">31</span>
+            </button>
+            <img src="https://dummyimage.com/44x44/ccddee/fff.jpg&text=U" alt="Profile" class="rounded-circle" width="44" height="44">
           </div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <section id="airport" class="px-6 py-16">
-      <div class="mx-auto max-w-7xl">
-        <div class="flex items-end justify-between gap-4">
-          <div>
-            <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Airport manager</p>
-            <h2 class="mt-2 text-3xl font-bold">Search airports and set favorites</h2>
-          </div>
-          <button id="refreshAirports" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
-        </div>
-        <form class="mt-6 grid gap-4 md:grid-cols-3">
-          <input id="airportSearch" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400 md:col-span-2" placeholder="Search by ICAO, name, or city" value="YBBN" />
-          <button id="searchAirport" class="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-300 md:col-start-3">Search</button>
-        </form>
-        <div id="airportResults" class="mt-6 grid gap-4 md:grid-cols-2"></div>
-        <div class="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm text-slate-400">Favorites</p>
-          <div id="favoritesList" class="mt-3 grid gap-4 sm:grid-cols-3"></div>
+    <main class="container-fluid px-3 px-lg-4 py-4" id="dashboard">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Good Morning, <strong>Billy Hinze</strong></h1>
+        <div class="text-muted small" id="liveClock"></div>
+      </div>
+
+      <div class="hero-banner p-4 p-md-5 mb-4">
+        <div class="banner-text col-lg-6">
+          <div class="display-6 fw-bold">Senior School</div>
+          <div class="h3 mb-3">Dashboard</div>
+          <p class="mb-0">A clean student portal with classes, timetable, grades, and news — designed to show front-end and UI skills.</p>
         </div>
       </div>
-    </section>
 
-    <section id="notam" class="px-6 py-16">
-      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-3">
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">NOTAM briefing</p>
-              <h2 class="mt-2 text-3xl font-bold">Active notices by airport</h2>
-            </div>
-            <button id="refreshNotam" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
-          </div>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <p class="text-sm text-slate-400">NOTAM A</p>
-              <pre class="mt-3 whitespace-pre-wrap rounded-xl bg-black/20 p-4 text-sm text-cyan-200">YBBN 240912 01R ALT SVC DUE TO MAINT WINDOW</pre>
-              <p class="mt-3 text-sm text-slate-300">Navigable reserve is altered; expect crosswind considerations.</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <p class="text-sm text-slate-400">NOTAM B</p>
-              <pre class="mt-3 whitespace-pre-wrap rounded-xl bg-black/20 p-4 text-sm text-cyan-200">YSSY 240910 16L LIGHTING OUT OF SERVICE</pre>
-              <p class="mt-3 text-sm text-slate-300">Runway lighting unavailable; night operations may require alternate.</p>
+      <section class="mb-4">
+        <div class="row g-3 g-md-4">
+          <div class="col-6 col-lg-3">
+            <div class="quick-link p-3 text-center">
+              <div class="icon"><i class="bi bi-easel"></i></div>
+              <div class="fw-semibold">Class Pages</div>
+              <div class="text-muted small">Materials and tasks</div>
             </div>
           </div>
-          <div class="mt-6 grid gap-4 sm:grid-cols-3">
-            <div class="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-amber-200">
-              <span class="text-xs font-semibold">High</span>
-              <span class="text-sm">3</span>
+          <div class="col-6 col-lg-3">
+            <div class="quick-link p-3 text-center">
+              <div class="icon"><i class="bi bi-people"></i></div>
+              <div class="fw-semibold">My Groups</div>
+              <div class="text-muted small">Teams and projects</div>
             </div>
-            <div class="flex items-center gap-3 rounded-2xl border border-sky-400/20 bg-sky-400/10 p-4 text-sky-200">
-              <span class="text-xs font-semibold">Medium</span>
-              <span class="text-sm">7</span>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="quick-link p-3 text-center">
+              <div class="icon"><i class="bi bi-gear-wide-connected"></i></div>
+              <div class="fw-semibold">Learning Journeys</div>
+              <div class="text-muted small">Goals and progress</div>
             </div>
-            <div class="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-emerald-200">
-              <span class="text-xs font-semibold">Low</span>
-              <span class="text-sm">12</span>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="quick-link p-3 text-center">
+              <div class="icon"><i class="bi bi-book"></i></div>
+              <div class="fw-semibold">Resources</div>
+              <div class="text-muted small">Library and tools</div>
             </div>
           </div>
         </div>
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Filters</p>
-          <h3 class="mt-2 text-2xl font-bold">NOTAM controls</h3>
-          <div class="mt-6 grid gap-3">
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" checked class="h-5 w-5 accent-cyan-400"> Operational</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> Maintenance</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" checked class="h-5 w-5 accent-cyan-400"> Lighting / ALS</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> Navigational aids</label>
-          </div>
-          <div class="mt-6 rounded-2xl border border-white/10 bg-slate-900 p-4 text-sm text-slate-300">
-            NOTAMs support safety and operational planning by alerting crews to changes in procedures and services [web:29].
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="weather" class="px-6 py-16">
-      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-3">
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Aviation weather</p>
-              <h2 class="mt-2 text-3xl font-bold">METAR and TAF panel</h2>
-            </div>
-            <button id="refreshWeather" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
-          </div>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <p class="text-sm text-slate-400">METAR</p>
-              <pre class="mt-3 whitespace-pre-wrap rounded-xl bg-black/20 p-4 text-sm text-cyan-200">YBBN 170730Z 09008KT 9999 SCT025 24/18 Q1018 NOSIG</pre>
-              <p class="mt-3 text-sm text-slate-300">Current surface report supporting operational decisions.</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <p class="text-sm text-slate-400">TAF</p>
-              <pre class="mt-3 whitespace-pre-wrap rounded-xl bg-black/20 p-4 text-sm text-cyan-200">TAF YBBN 170500Z 1706/1812 09012KT CAVOK
-FM171400 14010KT 9999 SCT020</pre>
-              <p class="mt-3 text-sm text-slate-300">Short-range forecast for arrival, departure, and alternates.</p>
-            </div>
-          </div>
-          <div class="mt-6 grid gap-4 sm:grid-cols-4">
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4 text-center">
-              <p class="text-xs uppercase text-slate-400">Visibility</p>
-              <p class="mt-2 text-2xl font-black">10+</p>
-              <p class="text-sm text-slate-300">km</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4 text-center">
-              <p class="text-xs uppercase text-slate-400">Ceiling</p>
-              <p class="mt-2 text-2xl font-black">2,500</p>
-              <p class="text-sm text-slate-300">ft SCT</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4 text-center">
-              <p class="text-xs uppercase text-slate-400">Wind</p>
-              <p class="mt-2 text-2xl font-black">090/08</p>
-              <p class="text-sm text-slate-300">KT</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-4 text-center">
-              <p class="text-xs uppercase text-slate-400">QNH</p>
-              <p class="mt-2 text-2xl font-black">1018</p>
-              <p class="text-sm text-slate-300">hPa</p>
-            </div>
-          </div>
-        </div>
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Flight rules</p>
-          <h3 class="mt-2 text-2xl font-bold">Operational category</h3>
-          <div class="mt-6 space-y-4">
-            <div>
-              <div class="flex justify-between text-sm"><span>VFR</span><span>78%</span></div>
-              <div class="mt-2 h-3 rounded-full bg-slate-800"><div class="h-3 w-[78%] rounded-full bg-emerald-400"></div></div>
-            </div>
-            <div>
-              <div class="flex justify-between text-sm"><span>MVFR</span><span>16%</span></div>
-              <div class="mt-2 h-3 rounded-full bg-slate-800"><div class="h-3 w-[16%] rounded-full bg-sky-400"></div></div>
-            </div>
-            <div>
-              <div class="flex justify-between text-sm"><span>IFR</span><span>6%</span></div>
-              <div class="mt-2 h-3 rounded-full bg-slate-800"><div class="h-3 w-[6%] rounded-full bg-rose-400"></div></div>
-            </div>
-          </div>
-          <div class="mt-6 rounded-2xl border border-white/10 bg-slate-900 p-4 text-sm text-slate-300">
-            METARs and TAFs are standard for aviation weather services and flight planning [web:15][web:17].
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="planner" class="px-6 py-16">
-      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-2">
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Route planner</p>
-          <h2 class="mt-2 text-3xl font-bold">Build a dispatch brief</h2>
-          <form class="mt-6 grid gap-4">
-            <div class="grid gap-4 sm:grid-cols-2">
-              <input id="origin" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Origin ICAO" value="YBBN" />
-              <input id="destination" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Destination ICAO" value="YSSY" />
-            </div>
-            <div class="grid gap-4 sm:grid-cols-3">
-              <input id="alternate" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Alternate ICAO" value="YBCS" />
-              <input id="altitude" type="number" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Cruise FL" value="350" />
-              <input id="fuel" type="number" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Fuel uplift" value="5800" />
-            </div>
-            <button id="calcBtn" type="button" class="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-300">Calculate brief</button>
-          </form>
-          <div id="briefResult" class="mt-5 rounded-2xl border border-white/10 bg-slate-900 p-5 text-sm text-slate-300">
-            Enter route details to generate a quick operational brief.
-          </div>
+      <section id="timetable" class="mb-4">
+        <div class="d-flex align-items-end justify-content-between mb-3">
+          <h2 class="section-title h4 mb-0">Today’s Timetable</h2>
+          <span class="badge-soft">Day 3</span>
         </div>
 
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Checklist</p>
-          <h2 class="mt-2 text-3xl font-bold">Pre-flight essentials</h2>
-          <div class="mt-6 grid gap-4 sm:grid-cols-2">
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" checked class="h-5 w-5 accent-cyan-400"> Flight plan filed</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" checked class="h-5 w-5 accent-cyan-400"> Weather reviewed</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> NOTAMs checked</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> Fuel confirmed</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" checked class="h-5 w-5 accent-cyan-400"> Crew briefed</label>
-            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> Alternates set</label>
+        <div class="row g-3">
+          <div class="col-12 col-xl-2">
+            <div class="timetable-day">
+              <div class="fw-bold">Lesson 1</div>
+              <div class="text-muted small mb-3">8:35am–9:34am</div>
+              <div class="lesson green">Prep Mathematical Methods 10<br><small>10-10MAT0300-A<br>Q3</small></div>
+            </div>
           </div>
-          <div class="mt-6 rounded-2xl border border-white/10 bg-slate-900 p-4 text-sm text-slate-300">
-            This checklist is interactive and can be expanded into a workflow.
+          <div class="col-12 col-xl-2">
+            <div class="timetable-day">
+              <div class="fw-bold">Lesson 2</div>
+              <div class="text-muted small mb-3">9:35am–10:34am</div>
+              <div class="lesson teal">English 10<br><small>10-10ENG0000-CI<br>M2</small></div>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="airport-status" class="px-6 py-16">
-      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-3">
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Airport status</p>
-          <h2 class="mt-2 text-3xl font-bold">Runway, gate, and stand cards</h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Runway 01R</h3>
-              <p class="mt-2 text-sm text-slate-300">Available, crosswind within limits.</p>
-              <span class="mt-3 inline-flex rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-300">Active</span>
+          <div class="col-12 col-xl-2">
+            <div class="timetable-day">
+              <div class="fw-bold">Assembly / Chapel</div>
+              <div class="text-muted small mb-3">10:55am–11:29am</div>
+              <div class="lesson blue">Homeroom<br><small>10-10PAS0001-T<br>J4</small></div>
             </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Gate B14</h3>
-              <p class="mt-2 text-sm text-slate-300">Occupied, outbound 10:20.</p>
-              <span class="mt-3 inline-flex rounded-full bg-sky-400/15 px-3 py-1 text-xs font-semibold text-sky-300">Occupied</span>
+          </div>
+          <div class="col-12 col-xl-2">
+            <div class="timetable-day">
+              <div class="fw-bold">Lesson 3</div>
+              <div class="text-muted small mb-3">11:30am–12:29pm</div>
+              <div class="lesson green">Physical Science 10<br><small>10-10SCI0600-C<br>J13</small></div>
             </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Stand 18</h3>
-              <p class="mt-2 text-sm text-slate-300">Inbound, ETA 11:10.</p>
-              <span class="mt-3 inline-flex rounded-full bg-violet-400/15 px-3 py-1 text-xs font-semibold text-violet-300">Inbound</span>
+          </div>
+          <div class="col-12 col-xl-2">
+            <div class="timetable-day">
+              <div class="fw-bold">Lesson 4</div>
+              <div class="text-muted small mb-3">12:30pm–1:29pm</div>
+              <div class="lesson pink">Digital Solutions 10<br><small>10-10DIG0000-A<br>I208</small></div>
             </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Runway 16L</h3>
-              <p class="mt-2 text-sm text-slate-300">Lighting out of service.</p>
-              <span class="mt-3 inline-flex rounded-full bg-amber-400/15 px-3 py-1 text-xs font-semibold text-amber-200">Restricted</span>
+          </div>
+          <div class="col-12 col-xl-2">
+            <div class="timetable-day">
+              <div class="fw-bold">Lesson 5</div>
+              <div class="text-muted small mb-3">2:05pm–3:04pm</div>
+              <div class="lesson yellow">Business 10<br><small>10-10BUS0100-A<br>Q2</small></div>
             </div>
           </div>
         </div>
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Flight board</p>
-          <h2 class="mt-2 text-2xl font-bold">Departures and arrivals</h2>
-          <button id="refreshFlights" class="mt-4 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh board</button>
-          <div id="flightList" class="mt-4 divide-y divide-white/10 rounded-2xl border border-white/10 bg-slate-900"></div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="fleet" class="px-6 py-16">
-      <div class="mx-auto max-w-7xl">
-        <div class="flex items-end justify-between gap-4">
-          <div>
-            <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Fleet monitor</p>
-            <h2 class="mt-2 text-3xl font-bold">Aircraft status dashboard</h2>
+      <section class="mb-4" id="classes">
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="tab-pane-card p-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title h4 mb-0">Classes & Tasks</h2>
+                <ul class="nav nav-pills" id="taskTabs" role="tablist">
+                  <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#allTasks" type="button">All</button></li>
+                  <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#upcomingTasks" type="button">Upcoming</button></li>
+                  <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#doneTasks" type="button">Completed</button></li>
+                </ul>
+              </div>
+
+              <div class="tab-content">
+                <div class="tab-pane fade show active" id="allTasks">
+                  <div class="table-responsive">
+                    <table class="table align-middle">
+                      <thead>
+                        <tr>
+                          <th>Subject</th>
+                          <th>Task</th>
+                          <th>Due</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="taskTable">
+                        <tr><td>Math</td><td>Worksheet 4</td><td>Today</td><td><span class="badge text-bg-warning">Due soon</span></td></tr>
+                        <tr><td>English</td><td>Essay Draft</td><td>Tomorrow</td><td><span class="badge text-bg-primary">In progress</span></td></tr>
+                        <tr><td>Science</td><td>Lab Report</td><td>Friday</td><td><span class="badge text-bg-success">Submitted</span></td></tr>
+                        <tr><td>Digital Solutions</td><td>Prototype review</td><td>Next week</td><td><span class="badge text-bg-info">Planned</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="upcomingTasks">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Math worksheet due today at 3:00pm</li>
+                    <li class="list-group-item">English essay draft due tomorrow</li>
+                    <li class="list-group-item">Digital Solutions prototype due next week</li>
+                  </ul>
+                </div>
+
+                <div class="tab-pane fade" id="doneTasks">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Science lab safety quiz submitted</li>
+                    <li class="list-group-item">Business class reflection completed</li>
+                    <li class="list-group-item">Library reading log completed</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <button id="refreshFleet" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
-        </div>
-        <div class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4" id="fleetGrid"></div>
-      </div>
-    </section>
 
-    <section class="px-6 py-16">
-      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-3">
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Ops center</p>
-          <h2 class="mt-2 text-3xl font-bold">What this portal can do</h2>
-          <div class="mt-6 grid gap-4 sm:grid-cols-2">
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Airport search</h3>
-              <p class="mt-2 text-sm text-slate-300">Find airports by ICAO, name, or city; save favorites.</p>
+          <div class="col-lg-4" id="grades">
+            <div class="info-card p-4 mb-4 bg-white">
+              <h2 class="section-title h5">Grades</h2>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between"><span>Math</span><strong>A</strong></div>
+                <div class="progress" style="height:8px;"><div class="progress-bar bg-success" style="width:92%"></div></div>
+              </div>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between"><span>English</span><strong>B+</strong></div>
+                <div class="progress" style="height:8px;"><div class="progress-bar bg-primary" style="width:84%"></div></div>
+              </div>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between"><span>Science</span><strong>A-</strong></div>
+                <div class="progress" style="height:8px;"><div class="progress-bar bg-info" style="width:89%"></div></div>
+              </div>
+              <div>
+                <div class="d-flex justify-content-between"><span>Digital Solutions</span><strong>A</strong></div>
+                <div class="progress" style="height:8px;"><div class="progress-bar bg-warning" style="width:95%"></div></div>
+              </div>
             </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">NOTAM briefing</h3>
-              <p class="mt-2 text-sm text-slate-300">Read notices, filter by type, and review severity.</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Enhanced weather</h3>
-              <p class="mt-2 text-sm text-slate-300">Display METAR, TAF, rules, and runway conditions.</p>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Route planner</h3>
-              <p class="mt-2 text-sm text-slate-300">Plan routes with alternates, fuel, and cruise inputs.</p>
+
+            <div class="info-card p-4 bg-white">
+              <h2 class="section-title h5">Upcoming Events</h2>
+              <div class="d-flex gap-3 mb-3">
+                <div class="badge bg-primary-subtle text-primary rounded-3 p-3">18 Jun</div>
+                <div>
+                  <div class="fw-semibold">Sport Carnival</div>
+                  <div class="text-muted small">All day event</div>
+                </div>
+              </div>
+              <div class="d-flex gap-3 mb-3">
+                <div class="badge bg-success-subtle text-success rounded-3 p-3">20 Jun</div>
+                <div>
+                  <div class="fw-semibold">Science assessment</div>
+                  <div class="text-muted small">Period 3</div>
+                </div>
+              </div>
+              <div class="d-flex gap-3">
+                <div class="badge bg-warning-subtle text-warning rounded-3 p-3">24 Jun</div>
+                <div>
+                  <div class="fw-semibold">Parent-teacher interviews</div>
+                  <div class="text-muted small">Afternoon</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Alerts</p>
-          <h2 class="mt-2 text-2xl font-bold">Operations messages</h2>
-          <div class="mt-6 space-y-4 text-sm">
-            <div class="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-emerald-200">Runway 01R available, crosswind within limits.</div>
-            <div class="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-amber-100">Moderate turbulence advisory on climb-out corridor.</div>
-            <div class="rounded-2xl border border-sky-400/20 bg-sky-400/10 p-4 text-sky-100">Stand reassignment in progress for inbound wave.</div>
+      </section>
+
+      <section class="mb-4" id="groups">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="news-card p-4 h-100 bg-white">
+              <h2 class="section-title h5">My Groups</h2>
+              <div class="row g-3 mt-1">
+                <div class="col-6">
+                  <div class="p-3 rounded-4 border bg-light">
+                    <div class="fw-semibold">STEM Team</div>
+                    <div class="text-muted small">4 members</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="p-3 rounded-4 border bg-light">
+                    <div class="fw-semibold">House Leaders</div>
+                    <div class="text-muted small">8 members</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="p-3 rounded-4 border bg-light">
+                    <div class="fw-semibold">Debate Club</div>
+                    <div class="text-muted small">12 members</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="p-3 rounded-4 border bg-light">
+                    <div class="fw-semibold">Coding Crew</div>
+                    <div class="text-muted small">6 members</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" id="news">
+            <div class="news-card p-4 h-100 bg-white">
+              <h2 class="section-title h5">News Headlines</h2>
+              <div class="d-flex gap-3 border-bottom py-3">
+                <div class="badge bg-info-subtle text-info rounded-3 p-3">All</div>
+                <div class="text-muted">Technology</div>
+                <div class="text-muted">Sports</div>
+                <div class="text-muted">Student Life</div>
+              </div>
+              <div class="py-3 border-bottom">
+                <div class="fw-semibold">Digital Solutions showcase opens next week</div>
+                <div class="text-muted small">Students are invited to present their projects in the library.</div>
+              </div>
+              <div class="py-3 border-bottom">
+                <div class="fw-semibold">House athletics results announced</div>
+                <div class="text-muted small">Congratulations to all competitors and volunteers.</div>
+              </div>
+              <div class="py-3">
+                <div class="fw-semibold">New library study spaces available</div>
+                <div class="text-muted small">Bookable rooms are now open before and after school.</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="contact" class="px-6 py-16 pb-24">
-      <div class="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-8">
-        <h2 class="text-3xl font-bold">Contact ops</h2>
-        <p class="mt-3 text-slate-300">Connect this form to your backend, CRM, or inbox for charters, dispatch, or support requests.</p>
-        <form class="mt-6 grid gap-4">
-          <input class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Name" />
-          <input class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Email" />
-          <textarea class="min-h-36 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Message"></textarea>
-          <button class="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-300" type="button">Send request</button>
-        </form>
-      </div>
-    </section>
-  </main>
+      <section class="mb-4" id="work">
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <div class="tab-pane-card p-4 bg-white">
+              <h2 class="section-title h5">Due Work</h2>
+              <div class="accordion" id="workAccordion">
+                <div class="accordion-item">
+                  <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#workOne">English Essay</button></h2>
+                  <div id="workOne" class="accordion-collapse collapse show" data-bs-parent="#workAccordion">
+                    <div class="accordion-body">Write the final draft, check citations, and submit by tomorrow.</div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workTwo">Math Problem Set</button></h2>
+                  <div id="workTwo" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                    <div class="accordion-body">Complete questions 1–20 and show working for every answer.</div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#workThree">Science Report</button></h2>
+                  <div id="workThree" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                    <div class="accordion-body">Finish the conclusion and attach your lab photos.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <footer class="border-t border-white/10 px-6 py-8 text-center text-sm text-slate-400">
-    <div class="mx-auto max-w-7xl">
-      <p>AeroScope Pro aviation portal template.</p>
-    </div>
-  </footer>
+          <div class="col-lg-5" id="email">
+            <div class="tab-pane-card p-4 bg-white h-100">
+              <h2 class="section-title h5">Email Preview</h2>
+              <div class="list-group mt-3">
+                <div class="list-group-item">
+                  <div class="d-flex justify-content-between">
+                    <strong>Mr. Carter</strong><span class="text-muted small">8:12 AM</span>
+                  </div>
+                  <div class="text-muted small">Reminder: bring your science notebook tomorrow.</div>
+                </div>
+                <div class="list-group-item">
+                  <div class="d-flex justify-content-between">
+                    <strong>Library Team</strong><span class="text-muted small">Yesterday</span>
+                  </div>
+                  <div class="text-muted small">Your study room booking has been confirmed.</div>
+                </div>
+                <div class="list-group-item">
+                  <div class="d-flex justify-content-between">
+                    <strong>House Coordinator</strong><span class="text-muted small">Yesterday</span>
+                  </div>
+                  <div class="text-muted small">Volunteer sign-up is now open.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      <section class="mb-4">
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="tab-pane-card p-4 bg-white">
+              <h2 class="section-title h5">Student Support</h2>
+              <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                  <div class="p-3 rounded-4 bg-light border">
+                    <div class="fw-semibold"><i class="bi bi-chat-dots me-2"></i>Counsellors</div>
+                    <div class="text-muted small">Book wellbeing support sessions and check availability.</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-4 bg-light border">
+                    <div class="fw-semibold"><i class="bi bi-laptop me-2"></i>Technical Services</div>
+                    <div class="text-muted small">Report login issues, passwords, or device problems.</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-4 bg-light border">
+                    <div class="fw-semibold"><i class="bi bi-shield-check me-2"></i>Student Policies</div>
+                    <div class="text-muted small">Read the code of conduct, acceptable use, and guidelines.</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-4 bg-light border">
+                    <div class="fw-semibold"><i class="bi bi-journal-text me-2"></i>Writing Guide</div>
+                    <div class="text-muted small">Check referencing, writing support, and style tips.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="tab-pane-card p-4 bg-white h-100">
+              <h2 class="section-title h5">To Do</h2>
+              <ul class="list-group list-group-flush mt-3">
+                <li class="list-group-item d-flex justify-content-between align-items-center">Submit Math worksheet <span class="badge bg-warning text-dark">Today</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Finish English draft <span class="badge bg-primary">Tomorrow</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">Pack sports uniform <span class="badge bg-success">Done</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-5">
+        <div class="info-card p-4 bg-white">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <h2 class="section-title h5 mb-0">Search the portal</h2>
+            <span class="text-muted small">Use the search box in the top bar too</span>
+          </div>
+          <div class="row g-3" id="cardsGrid">
+            <div class="col-md-4 portal-card">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="fw-semibold">Class Pages</div>
+                <div class="text-muted small">Lessons, handouts, and resources.</div>
+              </div>
+            </div>
+            <div class="col-md-4 portal-card">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="fw-semibold">Grades</div>
+                <div class="text-muted small">Assessments and progress tracking.</div>
+              </div>
+            </div>
+            <div class="col-md-4 portal-card">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="fw-semibold">Calendar</div>
+                <div class="text-muted small">Events, deadlines, and reminders.</div>
+              </div>
+            </div>
+            <div class="col-md-4 portal-card">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="fw-semibold">Library Services</div>
+                <div class="text-muted small">Book rooms and access study help.</div>
+              </div>
+            </div>
+            <div class="col-md-4 portal-card">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="fw-semibold">Email</div>
+                <div class="text-muted small">Teacher messages and updates.</div>
+              </div>
+            </div>
+            <div class="col-md-4 portal-card">
+              <div class="p-3 rounded-4 bg-light border">
+                <div class="fw-semibold">Drive</div>
+                <div class="text-muted small">Files, documents, and submissions.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const flights = [
-      { flight: 'QF401', route: 'YBBN → YSSY', time: '10:20', gate: 'B14', status: 'Boarding', tone: 'emerald' },
-      { flight: 'VA128', route: 'YSSY → YBCS', time: '10:35', gate: 'C07', status: 'On time', tone: 'sky' },
-      { flight: 'JQ809', route: 'YBCS → YBBN', time: '10:50', gate: 'A03', status: 'Delayed', tone: 'amber' },
-      { flight: 'NX211', route: 'YBBN → YPPH', time: '11:10', gate: 'D12', status: 'Taxiing', tone: 'violet' }
-    ];
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('menuBtn').addEventListener('click', () => sidebar.classList.toggle('show'));
 
-    const fleet = [
-      { reg: 'VH-ABC', type: 'A320neo', loc: 'Hangar 2', util: '82%', state: 'Ready' },
-      { reg: 'VH-DEF', type: 'B737-800', loc: 'Gate B9', util: '76%', state: 'Turnaround' },
-      { reg: 'VH-GHI', type: 'ATR 72', loc: 'Maintenance', util: '58%', state: 'Check A' },
-      { reg: 'VH-JKL', type: 'E190', loc: 'Stand 18', util: '69%', state: 'Ready' }
-    ];
-
-    const airports = [
-      { icao: 'YBBN', name: 'Newcastle', city: 'Newcastle' },
-      { icao: 'YSSY', name: 'Sydney', city: 'Sydney' },
-      { icao: 'YBCS', name: 'Coffs Harbour', city: 'Coffs Harbour' }
-    ];
-
-    const flightList = document.getElementById('flightList');
-    const fleetGrid = document.getElementById('fleetGrid');
-    const airportResults = document.getElementById('airportResults');
-    const favoritesList = document.getElementById('favoritesList');
-
-    let favorites = ['YBBN', 'YSSY'];
-
-    function badgeClass(tone){
-      return {
-        emerald: 'bg-emerald-400/15 text-emerald-300',
-        sky: 'bg-sky-400/15 text-sky-300',
-        amber: 'bg-amber-400/15 text-amber-200',
-        violet: 'bg-violet-400/15 text-violet-300'
-      }[tone] || 'bg-white/10 text-slate-200';
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('liveClock').textContent = now.toLocaleString([], {
+        weekday: 'long', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
     }
+    updateClock();
+    setInterval(updateClock, 1000);
 
-    function renderFlights(){
-      flightList.innerHTML = flights.map(f => `
-        <div class="grid grid-cols-5 gap-4 px-5 py-4 text-sm items-center">
-          <div class="font-semibold">${f.flight}</div>
-          <div class="text-slate-300">${f.route}</div>
-          <div class="text-slate-300">${f.time}</div>
-          <div class="text-slate-300">${f.gate}</div>
-          <div><span class="rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(f.tone)}">${f.status}</span></div>
-        </div>
-      `).join('');
-    }
-
-    function renderFleet(){
-      fleetGrid.innerHTML = fleet.map(a => `
-        <article class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="text-sm text-slate-400">${a.reg}</p>
-              <h3 class="mt-1 text-2xl font-bold">${a.type}</h3>
-            </div>
-            <span class="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-semibold text-cyan-300">${a.state}</span>
-          </div>
-          <div class="mt-5 space-y-3 text-sm text-slate-300">
-            <div class="flex justify-between"><span>Location</span><span>${a.loc}</span></div>
-            <div class="flex justify-between"><span>Utilization</span><span>${a.util}</span></div>
-            <div class="flex justify-between"><span>Dispatch</span><span>Active</span></div>
-          </div>
-          <div class="mt-5 h-2 rounded-full bg-slate-800"><div class="h-2 rounded-full bg-cyan-400" style="width:${a.util}"></div></div>
-        </article>
-      `).join('');
-    }
-
-    function renderAirports(){
-      airportResults.innerHTML = airports.map(a => `
-        <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="text-sm text-slate-400">${a.icao}</p>
-              <h3 class="mt-1 text-2xl font-bold">${a.name}</h3>
-            </div>
-            <span class="rounded-full bg-sky-400/15 px-3 py-1 text-xs font-semibold text-sky-300">${a.city}</span>
-          </div>
-          <button data-icao="${a.icao}" class="mt-4 w-full rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-300">Add to favorites</button>
-        </div>
-      `).join('');
-    }
-
-    function renderFavorites(){
-      favoritesList.innerHTML = favorites.map(icao => {
-        const a = airports.find(x => x.icao === icao) || { icao, name: icao, city: '—' };
-        return `
-          <div class="rounded-2xl border border-white/10 bg-slate-900 p-4">
-            <p class="text-sm text-slate-400">${a.icao}</p>
-            <h3 class="mt-1 text-xl font-bold">${a.name}</h3>
-            <p class="mt-1 text-sm text-slate-300">${a.city}</p>
-          </div>
-        `;
-      }).join('');
-    }
-
-    document.getElementById('searchAirport').addEventListener('click', () => {
-      renderAirports();
-    });
-
-    document.getElementById('refreshAirports').addEventListener('click', () => {
-      renderAirports();
-    });
-
-    document.getElementById('refreshFlights').addEventListener('click', () => {
-      flights.push(flights.shift());
-      renderFlights();
-    });
-
-    document.getElementById('refreshFleet').addEventListener('click', () => {
-      fleet.push(fleet.shift());
-      renderFleet();
-    });
-
-    document.getElementById('refreshWeather').addEventListener('click', () => {
-      // Placeholder: refresh would call API here
-    });
-
-    document.getElementById('refreshNotam').addEventListener('click', () => {
-      // Placeholder: refresh would call API here
-    });
-
-    document.querySelectorAll('#airportResults button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const icao = btn.getAttribute('data-icao');
-        if (!favorites.includes(icao)) favorites.push(icao);
-        renderFavorites();
+    const searchInput = document.getElementById('searchInput');
+    searchInput?.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase();
+      document.querySelectorAll('.portal-card').forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
       });
     });
-
-    document.getElementById('calcBtn').addEventListener('click', () => {
-      const origin = document.getElementById('origin').value || '---';
-      const destination = document.getElementById('destination').value || '---';
-      const alternate = document.getElementById('alternate').value || '---';
-      const altitude = document.getElementById('altitude').value || '---';
-      const fuel = document.getElementById('fuel').value || '---';
-      document.getElementById('briefResult').innerHTML = `
-        <div class="grid gap-2">
-          <div><span class="text-slate-400">Route:</span> <strong class="text-slate-100">${origin} → ${destination}</strong></div>
-          <div><span class="text-slate-400">Alternate:</span> <strong class="text-slate-100">${alternate}</strong></div>
-          <div><span class="text-slate-400">Cruise level:</span> <strong class="text-slate-100">FL${altitude}</strong></div>
-          <div><span class="text-slate-400">Fuel uplift:</span> <strong class="text-slate-100">${fuel} kg</strong></div>
-          <div class="pt-2 text-emerald-300">Brief created. Review weather, alternates, and NOTAMs before release.</div>
-        </div>
-      `;
-    });
-
-    document.getElementById('themeBtn').addEventListener('click', () => {
-      document.body.classList.toggle('bg-opsbg');
-      document.body.classList.toggle('bg-slate-900');
-      document.querySelectorAll('.bg-cyan-400').forEach(el => el.classList.toggle('bg-cyan-300'));
-    });
-
-    renderFlights();
-    renderFleet();
-    renderAirports();
-    renderFavorites();
   </script>
 </body>
 </html>
