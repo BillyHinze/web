@@ -3,35 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AeroScope | Aviation Operations Dashboard</title>
-  <meta name="description" content="A functional aviation landing page with flight status, airport search, weather, and planning tools." />
+  <title>AeroScope Pro | Aviation Operations Portal</title>
+  <meta name="description" content="A comprehensive aviation portal with weather, NOTAMs, planning, airport status, fleet, and alerts." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            skyglass: 'rgba(255,255,255,0.06)'
+            skyglass: 'rgba(255,255,255,0.06)',
+            opsbg: '#0b1120'
           }
         }
       }
     }
   </script>
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
-  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur">
+<body class="min-h-screen bg-opsbg text-slate-100 antialiased">
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-opsbg/85 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
         <div class="grid h-10 w-10 place-items-center rounded-2xl bg-cyan-400 text-slate-950 font-black">A</div>
         <div>
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">AeroScope</p>
-          <p class="text-xs text-slate-400">Aviation operations dashboard</p>
+          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">AeroScope Pro</p>
+          <p class="text-xs text-slate-400">Aviation operations portal</p>
         </div>
       </div>
       <nav class="hidden items-center gap-6 md:flex text-sm text-slate-300">
-        <a href="#status" class="hover:text-cyan-300">Status</a>
+        <a href="#airport" class="hover:text-cyan-300">Airport</a>
+        <a href="#notam" class="hover:text-cyan-300">NOTAM</a>
         <a href="#weather" class="hover:text-cyan-300">Weather</a>
         <a href="#planner" class="hover:text-cyan-300">Planner</a>
+        <a href="#airport-status" class="hover:text-cyan-300">Status</a>
         <a href="#fleet" class="hover:text-cyan-300">Fleet</a>
         <a href="#contact" class="hover:text-cyan-300">Contact</a>
       </nav>
@@ -47,12 +50,12 @@
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.16),transparent_40%),linear-gradient(180deg,rgba(15,23,42,0.4),rgba(2,6,23,1))]"></div>
       <div class="relative mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-2 lg:items-center lg:py-28">
         <div>
-          <span class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-300">Live aviation operations and flight planning</span>
-          <h1 class="mt-6 text-4xl font-black tracking-tight sm:text-6xl">Everything a pilot, dispatcher, or ops team needs on one page</h1>
-          <p class="mt-6 max-w-2xl text-lg text-slate-300">Track flight status, review airport weather, decode METAR and TAF data, calculate planning notes, and monitor your fleet from a polished Tailwind dashboard.</p>
+          <span class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1 text-sm text-cyan-300">Comprehensive aviation operations and planning</span>
+          <h1 class="mt-6 text-4xl font-black tracking-tight sm:text-6xl">A complete portal for pilots, dispatchers, and ops teams</h1>
+          <p class="mt-6 max-w-2xl text-lg text-slate-300">Search airports, review METAR and TAF data, read NOTAMs, plan routes with alternates, monitor runway and gate status, track fleet, and manage alerts.</p>
           <div class="mt-8 flex flex-wrap gap-4">
             <a href="#planner" class="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-300">Start planning</a>
-            <a href="#status" class="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-semibold hover:bg-white/10">View flight board</a>
+            <a href="#airport" class="rounded-full border border-white/10 bg-white/5 px-6 py-3 font-semibold hover:bg-white/10">Search airports</a>
           </div>
           <div class="mt-10 grid gap-4 sm:grid-cols-3">
             <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -103,24 +106,76 @@
       </div>
     </section>
 
-    <section id="status" class="px-6 py-16">
+    <section id="airport" class="px-6 py-16">
       <div class="mx-auto max-w-7xl">
-        <div class="flex flex-wrap items-end justify-between gap-4">
+        <div class="flex items-end justify-between gap-4">
           <div>
-            <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Flight status</p>
-            <h2 class="mt-2 text-3xl font-bold">Airport departures and arrivals board</h2>
+            <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Airport manager</p>
+            <h2 class="mt-2 text-3xl font-bold">Search airports and set favorites</h2>
           </div>
-          <button id="refreshFlights" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh board</button>
+          <button id="refreshAirports" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
         </div>
-        <div class="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-          <div class="grid grid-cols-12 gap-4 border-b border-white/10 px-5 py-4 text-xs uppercase tracking-[0.2em] text-slate-400">
-            <div class="col-span-3">Flight</div>
-            <div class="col-span-3">Route</div>
-            <div class="col-span-2">ETD/ETA</div>
-            <div class="col-span-2">Gate/Stand</div>
-            <div class="col-span-2">Status</div>
+        <form class="mt-6 grid gap-4 md:grid-cols-3">
+          <input id="airportSearch" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400 md:col-span-2" placeholder="Search by ICAO, name, or city" value="YBBN" />
+          <button id="searchAirport" class="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-300 md:col-start-3">Search</button>
+        </form>
+        <div id="airportResults" class="mt-6 grid gap-4 md:grid-cols-2"></div>
+        <div class="mt-6 rounded-3xl border border-white/10 bg-white/5 p-6">
+          <p class="text-sm text-slate-400">Favorites</p>
+          <div id="favoritesList" class="mt-3 grid gap-4 sm:grid-cols-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="notam" class="px-6 py-16">
+      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-3">
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">NOTAM briefing</p>
+              <h2 class="mt-2 text-3xl font-bold">Active notices by airport</h2>
+            </div>
+            <button id="refreshNotam" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
           </div>
-          <div id="flightList" class="divide-y divide-white/10"></div>
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
+              <p class="text-sm text-slate-400">NOTAM A</p>
+              <pre class="mt-3 whitespace-pre-wrap rounded-xl bg-black/20 p-4 text-sm text-cyan-200">YBBN 240912 01R ALT SVC DUE TO MAINT WINDOW</pre>
+              <p class="mt-3 text-sm text-slate-300">Navigable reserve is altered; expect crosswind considerations.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
+              <p class="text-sm text-slate-400">NOTAM B</p>
+              <pre class="mt-3 whitespace-pre-wrap rounded-xl bg-black/20 p-4 text-sm text-cyan-200">YSSY 240910 16L LIGHTING OUT OF SERVICE</pre>
+              <p class="mt-3 text-sm text-slate-300">Runway lighting unavailable; night operations may require alternate.</p>
+            </div>
+          </div>
+          <div class="mt-6 grid gap-4 sm:grid-cols-3">
+            <div class="flex items-center gap-3 rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-amber-200">
+              <span class="text-xs font-semibold">High</span>
+              <span class="text-sm">3</span>
+            </div>
+            <div class="flex items-center gap-3 rounded-2xl border border-sky-400/20 bg-sky-400/10 p-4 text-sky-200">
+              <span class="text-xs font-semibold">Medium</span>
+              <span class="text-sm">7</span>
+            </div>
+            <div class="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-emerald-200">
+              <span class="text-xs font-semibold">Low</span>
+              <span class="text-sm">12</span>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Filters</p>
+          <h3 class="mt-2 text-2xl font-bold">NOTAM controls</h3>
+          <div class="mt-6 grid gap-3">
+            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" checked class="h-5 w-5 accent-cyan-400"> Operational</label>
+            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> Maintenance</label>
+            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" checked class="h-5 w-5 accent-cyan-400"> Lighting / ALS</label>
+            <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> Navigational aids</label>
+          </div>
+          <div class="mt-6 rounded-2xl border border-white/10 bg-slate-900 p-4 text-sm text-slate-300">
+            NOTAMs support safety and operational planning by alerting crews to changes in procedures and services [web:29].
+          </div>
         </div>
       </div>
     </section>
@@ -133,13 +188,13 @@
               <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Aviation weather</p>
               <h2 class="mt-2 text-3xl font-bold">METAR and TAF panel</h2>
             </div>
-            <span class="rounded-full bg-sky-400/15 px-3 py-1 text-sm text-sky-300">VFR trending</span>
+            <button id="refreshWeather" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
           </div>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
               <p class="text-sm text-slate-400">METAR</p>
               <pre class="mt-3 whitespace-pre-wrap rounded-xl bg-black/20 p-4 text-sm text-cyan-200">YBBN 170730Z 09008KT 9999 SCT025 24/18 Q1018 NOSIG</pre>
-              <p class="mt-3 text-sm text-slate-300">Current surface weather report for operational decision-making.</p>
+              <p class="mt-3 text-sm text-slate-300">Current surface report supporting operational decisions.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
               <p class="text-sm text-slate-400">TAF</p>
@@ -189,7 +244,7 @@ FM171400 14010KT 9999 SCT020</pre>
             </div>
           </div>
           <div class="mt-6 rounded-2xl border border-white/10 bg-slate-900 p-4 text-sm text-slate-300">
-            METARs are current surface observations, and TAFs provide short-term forecasts used for flight planning.
+            METARs and TAFs are standard for aviation weather services and flight planning [web:15][web:17].
           </div>
         </div>
       </div>
@@ -198,16 +253,16 @@ FM171400 14010KT 9999 SCT020</pre>
     <section id="planner" class="px-6 py-16">
       <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-2">
         <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Flight planner</p>
-          <h2 class="mt-2 text-3xl font-bold">Build a quick dispatch brief</h2>
+          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Route planner</p>
+          <h2 class="mt-2 text-3xl font-bold">Build a dispatch brief</h2>
           <form class="mt-6 grid gap-4">
             <div class="grid gap-4 sm:grid-cols-2">
               <input id="origin" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Origin ICAO" value="YBBN" />
               <input id="destination" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Destination ICAO" value="YSSY" />
             </div>
             <div class="grid gap-4 sm:grid-cols-3">
+              <input id="alternate" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Alternate ICAO" value="YBCS" />
               <input id="altitude" type="number" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Cruise FL" value="350" />
-              <input id="pax" type="number" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Passengers" value="142" />
               <input id="fuel" type="number" class="rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none placeholder:text-slate-500 focus:border-cyan-400" placeholder="Fuel uplift" value="5800" />
             </div>
             <button id="calcBtn" type="button" class="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-slate-950 hover:bg-cyan-300">Calculate brief</button>
@@ -229,8 +284,45 @@ FM171400 14010KT 9999 SCT020</pre>
             <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900 p-4"><input type="checkbox" class="h-5 w-5 accent-cyan-400"> Alternates set</label>
           </div>
           <div class="mt-6 rounded-2xl border border-white/10 bg-slate-900 p-4 text-sm text-slate-300">
-            This checklist is interactive in the browser and can be expanded into a more advanced workflow later.
+            This checklist is interactive and can be expanded into a workflow.
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="airport-status" class="px-6 py-16">
+      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-3">
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
+          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Airport status</p>
+          <h2 class="mt-2 text-3xl font-bold">Runway, gate, and stand cards</h2>
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
+              <h3 class="font-bold">Runway 01R</h3>
+              <p class="mt-2 text-sm text-slate-300">Available, crosswind within limits.</p>
+              <span class="mt-3 inline-flex rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-300">Active</span>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
+              <h3 class="font-bold">Gate B14</h3>
+              <p class="mt-2 text-sm text-slate-300">Occupied, outbound 10:20.</p>
+              <span class="mt-3 inline-flex rounded-full bg-sky-400/15 px-3 py-1 text-xs font-semibold text-sky-300">Occupied</span>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
+              <h3 class="font-bold">Stand 18</h3>
+              <p class="mt-2 text-sm text-slate-300">Inbound, ETA 11:10.</p>
+              <span class="mt-3 inline-flex rounded-full bg-violet-400/15 px-3 py-1 text-xs font-semibold text-violet-300">Inbound</span>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
+              <h3 class="font-bold">Runway 16L</h3>
+              <p class="mt-2 text-sm text-slate-300">Lighting out of service.</p>
+              <span class="mt-3 inline-flex rounded-full bg-amber-400/15 px-3 py-1 text-xs font-semibold text-amber-200">Restricted</span>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Flight board</p>
+          <h2 class="mt-2 text-2xl font-bold">Departures and arrivals</h2>
+          <button id="refreshFlights" class="mt-4 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh board</button>
+          <div id="flightList" class="mt-4 divide-y divide-white/10 rounded-2xl border border-white/10 bg-slate-900"></div>
         </div>
       </div>
     </section>
@@ -240,8 +332,9 @@ FM171400 14010KT 9999 SCT020</pre>
         <div class="flex items-end justify-between gap-4">
           <div>
             <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Fleet monitor</p>
-            <h2 class="mt-2 text-3xl font-bold">Aircraft status cards</h2>
+            <h2 class="mt-2 text-3xl font-bold">Aircraft status dashboard</h2>
           </div>
+          <button id="refreshFleet" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:bg-white/10">Refresh</button>
         </div>
         <div class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4" id="fleetGrid"></div>
       </div>
@@ -251,23 +344,23 @@ FM171400 14010KT 9999 SCT020</pre>
       <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-3">
         <div class="rounded-3xl border border-white/10 bg-white/5 p-6 lg:col-span-2">
           <p class="text-sm uppercase tracking-[0.3em] text-cyan-300">Ops center</p>
-          <h2 class="mt-2 text-3xl font-bold">What this page can do</h2>
+          <h2 class="mt-2 text-3xl font-bold">What this portal can do</h2>
           <div class="mt-6 grid gap-4 sm:grid-cols-2">
             <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Live board</h3>
-              <p class="mt-2 text-sm text-slate-300">Show departures, arrivals, gates, ETD/ETA, and status colors.</p>
+              <h3 class="font-bold">Airport search</h3>
+              <p class="mt-2 text-sm text-slate-300">Find airports by ICAO, name, or city; save favorites.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Weather panel</h3>
-              <p class="mt-2 text-sm text-slate-300">Display METAR, TAF, flight rules, and runway conditions.</p>
+              <h3 class="font-bold">NOTAM briefing</h3>
+              <p class="mt-2 text-sm text-slate-300">Read notices, filter by type, and review severity.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Planner</h3>
-              <p class="mt-2 text-sm text-slate-300">Collect route, passengers, fuel, and cruise altitude inputs.</p>
+              <h3 class="font-bold">Enhanced weather</h3>
+              <p class="mt-2 text-sm text-slate-300">Display METAR, TAF, rules, and runway conditions.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
-              <h3 class="font-bold">Fleet view</h3>
-              <p class="mt-2 text-sm text-slate-300">Track aircraft type, registration, utilization, and maintenance state.</p>
+              <h3 class="font-bold">Route planner</h3>
+              <p class="mt-2 text-sm text-slate-300">Plan routes with alternates, fuel, and cruise inputs.</p>
             </div>
           </div>
         </div>
@@ -299,7 +392,7 @@ FM171400 14010KT 9999 SCT020</pre>
 
   <footer class="border-t border-white/10 px-6 py-8 text-center text-sm text-slate-400">
     <div class="mx-auto max-w-7xl">
-      <p>AeroScope aviation dashboard template.</p>
+      <p>AeroScope Pro aviation portal template.</p>
     </div>
   </footer>
 
@@ -318,8 +411,18 @@ FM171400 14010KT 9999 SCT020</pre>
       { reg: 'VH-JKL', type: 'E190', loc: 'Stand 18', util: '69%', state: 'Ready' }
     ];
 
+    const airports = [
+      { icao: 'YBBN', name: 'Newcastle', city: 'Newcastle' },
+      { icao: 'YSSY', name: 'Sydney', city: 'Sydney' },
+      { icao: 'YBCS', name: 'Coffs Harbour', city: 'Coffs Harbour' }
+    ];
+
     const flightList = document.getElementById('flightList');
     const fleetGrid = document.getElementById('fleetGrid');
+    const airportResults = document.getElementById('airportResults');
+    const favoritesList = document.getElementById('favoritesList');
+
+    let favorites = ['YBBN', 'YSSY'];
 
     function badgeClass(tone){
       return {
@@ -332,12 +435,12 @@ FM171400 14010KT 9999 SCT020</pre>
 
     function renderFlights(){
       flightList.innerHTML = flights.map(f => `
-        <div class="grid grid-cols-12 gap-4 px-5 py-4 text-sm items-center">
-          <div class="col-span-3 font-semibold">${f.flight}</div>
-          <div class="col-span-3 text-slate-300">${f.route}</div>
-          <div class="col-span-2 text-slate-300">${f.time}</div>
-          <div class="col-span-2 text-slate-300">${f.gate}</div>
-          <div class="col-span-2"><span class="rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(f.tone)}">${f.status}</span></div>
+        <div class="grid grid-cols-5 gap-4 px-5 py-4 text-sm items-center">
+          <div class="font-semibold">${f.flight}</div>
+          <div class="text-slate-300">${f.route}</div>
+          <div class="text-slate-300">${f.time}</div>
+          <div class="text-slate-300">${f.gate}</div>
+          <div><span class="rounded-full px-3 py-1 text-xs font-semibold ${badgeClass(f.tone)}">${f.status}</span></div>
         </div>
       `).join('');
     }
@@ -362,21 +465,40 @@ FM171400 14010KT 9999 SCT020</pre>
       `).join('');
     }
 
-    document.getElementById('calcBtn').addEventListener('click', () => {
-      const origin = document.getElementById('origin').value || '---';
-      const destination = document.getElementById('destination').value || '---';
-      const altitude = document.getElementById('altitude').value || '---';
-      const pax = document.getElementById('pax').value || '---';
-      const fuel = document.getElementById('fuel').value || '---';
-      document.getElementById('briefResult').innerHTML = `
-        <div class="grid gap-2">
-          <div><span class="text-slate-400">Route:</span> <strong class="text-slate-100">${origin} → ${destination}</strong></div>
-          <div><span class="text-slate-400">Cruise level:</span> <strong class="text-slate-100">FL${altitude}</strong></div>
-          <div><span class="text-slate-400">Passengers:</span> <strong class="text-slate-100">${pax}</strong></div>
-          <div><span class="text-slate-400">Fuel uplift:</span> <strong class="text-slate-100">${fuel} kg</strong></div>
-          <div class="pt-2 text-emerald-300">Brief created. Review weather, alternates, and NOTAMs before release.</div>
+    function renderAirports(){
+      airportResults.innerHTML = airports.map(a => `
+        <div class="rounded-2xl border border-white/10 bg-slate-900 p-5">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-sm text-slate-400">${a.icao}</p>
+              <h3 class="mt-1 text-2xl font-bold">${a.name}</h3>
+            </div>
+            <span class="rounded-full bg-sky-400/15 px-3 py-1 text-xs font-semibold text-sky-300">${a.city}</span>
+          </div>
+          <button data-icao="${a.icao}" class="mt-4 w-full rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-cyan-300">Add to favorites</button>
         </div>
-      `;
+      `).join('');
+    }
+
+    function renderFavorites(){
+      favoritesList.innerHTML = favorites.map(icao => {
+        const a = airports.find(x => x.icao === icao) || { icao, name: icao, city: '—' };
+        return `
+          <div class="rounded-2xl border border-white/10 bg-slate-900 p-4">
+            <p class="text-sm text-slate-400">${a.icao}</p>
+            <h3 class="mt-1 text-xl font-bold">${a.name}</h3>
+            <p class="mt-1 text-sm text-slate-300">${a.city}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('searchAirport').addEventListener('click', () => {
+      renderAirports();
+    });
+
+    document.getElementById('refreshAirports').addEventListener('click', () => {
+      renderAirports();
     });
 
     document.getElementById('refreshFlights').addEventListener('click', () => {
@@ -384,14 +506,54 @@ FM171400 14010KT 9999 SCT020</pre>
       renderFlights();
     });
 
+    document.getElementById('refreshFleet').addEventListener('click', () => {
+      fleet.push(fleet.shift());
+      renderFleet();
+    });
+
+    document.getElementById('refreshWeather').addEventListener('click', () => {
+      // Placeholder: refresh would call API here
+    });
+
+    document.getElementById('refreshNotam').addEventListener('click', () => {
+      // Placeholder: refresh would call API here
+    });
+
+    document.querySelectorAll('#airportResults button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const icao = btn.getAttribute('data-icao');
+        if (!favorites.includes(icao)) favorites.push(icao);
+        renderFavorites();
+      });
+    });
+
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const origin = document.getElementById('origin').value || '---';
+      const destination = document.getElementById('destination').value || '---';
+      const alternate = document.getElementById('alternate').value || '---';
+      const altitude = document.getElementById('altitude').value || '---';
+      const fuel = document.getElementById('fuel').value || '---';
+      document.getElementById('briefResult').innerHTML = `
+        <div class="grid gap-2">
+          <div><span class="text-slate-400">Route:</span> <strong class="text-slate-100">${origin} → ${destination}</strong></div>
+          <div><span class="text-slate-400">Alternate:</span> <strong class="text-slate-100">${alternate}</strong></div>
+          <div><span class="text-slate-400">Cruise level:</span> <strong class="text-slate-100">FL${altitude}</strong></div>
+          <div><span class="text-slate-400">Fuel uplift:</span> <strong class="text-slate-100">${fuel} kg</strong></div>
+          <div class="pt-2 text-emerald-300">Brief created. Review weather, alternates, and NOTAMs before release.</div>
+        </div>
+      `;
+    });
+
     document.getElementById('themeBtn').addEventListener('click', () => {
-      document.body.classList.toggle('bg-slate-950');
+      document.body.classList.toggle('bg-opsbg');
       document.body.classList.toggle('bg-slate-900');
       document.querySelectorAll('.bg-cyan-400').forEach(el => el.classList.toggle('bg-cyan-300'));
     });
 
     renderFlights();
     renderFleet();
+    renderAirports();
+    renderFavorites();
   </script>
 </body>
 </html>
