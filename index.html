@@ -1,524 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Rocket League Lite</title>
-  <style>
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #07111f;
-      font-family: Arial, sans-serif;
-    }
-    canvas { display: block; }
-    #ui {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      z-index: 10;
-      color: white;
-      user-select: none;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.65);
-    }
-    #score {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    #countdown {
-      font-size: 42px;
-      font-weight: 900;
-      color: #ffffff;
-      margin: 8px 0;
-      min-height: 52px;
-    }
-    #help {
-      font-size: 13px;
-      line-height: 1.5;
-      opacity: 0.95;
-      max-width: 420px;
-    }
-    #msg {
-      margin-top: 8px;
-      color: #9df;
-      min-height: 18px;
-    }
-    #boostUI {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #8dffb3;
-      line-height: 1.4;
-    }
-    .padLegend {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
-  </style>
-
-  <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.3/dist/es-module-shims.js"></script>
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"
-    }
-  }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div id="ui">
-    <div id="score">You 0 - 0 AI</div>
-    <div id="countdown">3</div>
-    <div id="help">
-      Move: W A S D or Arrow Keys<br>
-      Boost: Shift or Space<br>
-      Jump: E or Enter<br>
-      Reset: R
-    </div>
-    <div id="boostUI"></div>
-    <div id="msg"></div>
-  </div>
+<body class="font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="text-2xl font-bold text-indigo-600">MyBrand</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-indigo-600 transition">Home</a>
+                    <a href="#features" class="text-gray-700 hover:text-indigo-600 transition">Features</a>
+                    <a href="#about" class="text-gray-700 hover:text-indigo-600 transition">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-indigo-600 transition">Contact</a>
+                </div>
+                <button class="md:hidden text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-  <script type="module">
-    import * as THREE from 'three';
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-20 bg-gradient-to-br from-indigo-600 to-purple-700">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
+                Welcome to My Website
+            </h1>
+            <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                Build beautiful, responsive websites with modern design and clean code.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#features" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition shadow-lg">
+                    Explore Features
+                </a>
+                <a href="#contact" class="bg-indigo-800 text-white px-8 py-3 rounded-full font-semibold hover:bg-indigo-900 transition shadow-lg border border-white">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </section>
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x07111f);
-    scene.fog = new THREE.Fog(0x07111f, 35, 130);
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-800 mb-16">
+                Our Features
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Fast Performance</h3>
+                    <p class="text-gray-600">Optimized for speed with lightning-fast load times and smooth interactions.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 012-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Responsive Design</h3>
+                    <p class="text-gray-600">Looks perfect on all devices from mobile phones to large desktop screens.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l3 3 6-6m-6-6l3-3 6 6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Easy to Use</h3>
+                    <p class="text-gray-600">Intuitive interface that makes navigation simple for everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(devicePixelRatio);
-    renderer.shadowMap.enabled = true;
-    document.body.appendChild(renderer.domElement);
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-800 mb-6">
+                        About Us
+                    </h2>
+                    <p class="text-gray-600 mb-4 text-lg">
+                        We're dedicated to creating exceptional digital experiences that help businesses grow and succeed.
+                    </p>
+                    <p class="text-gray-600 mb-6 text-lg">
+                        With years of experience in web development and design, we bring innovation and quality to every project.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-gray-700">
+                            <svg class="w-5 h-5 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Professional team
+                        </li>
+                        <li class="flex items-center text-gray-700">
+                            <svg class="w-5 h-5 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            24/7 support
+                        </li>
+                        <li class="flex items-center text-gray-700">
+                            <svg class="w-5 h-5 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Proven results
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl h-64 md:h-80 flex items-center justify-center">
+                    <svg class="w-32 h-32 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    const ambient = new THREE.AmbientLight(0xffffff, 1.15);
-    scene.add(ambient);
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-white mb-16">
+                Contact Us
+            </h2>
+            <div class="max-w-2xl mx-auto">
+                <form class="space-y-6">
+                    <div>
+                        <input type="text" placeholder="Your Name" class="w-full px-6 py-4 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-indigo-500 focus:outline-none placeholder-gray-400">
+                    </div>
+                    <div>
+                        <input type="email" placeholder="Your Email" class="w-full px-6 py-4 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-indigo-500 focus:outline-none placeholder-gray-400">
+                    </div>
+                    <div>
+                        <textarea placeholder="Your Message" rows="5" class="w-full px-6 py-4 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-indigo-500 focus:outline-none placeholder-gray-400"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
 
-    const sun = new THREE.DirectionalLight(0xffffff, 2.2);
-    sun.position.set(20, 40, 10);
-    sun.castShadow = true;
-    scene.add(sun);
-
-    const hemi = new THREE.HemisphereLight(0x88bbff, 0x223344, 1.2);
-    scene.add(hemi);
-
-    const fieldSize = 90;
-    const fieldWidth = 60;
-    const halfL = fieldSize / 2;
-    const halfW = fieldWidth / 2;
-
-    const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(fieldSize, fieldWidth),
-      new THREE.MeshStandardMaterial({ color: 0x143a2c, roughness: 1 })
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    scene.add(ground);
-
-    const lineMat = new THREE.MeshStandardMaterial({ color: 0x4a5e70, roughness: 1 });
-    const centerLine = new THREE.Mesh(new THREE.BoxGeometry(fieldSize, 0.05, 0.12), lineMat);
-    centerLine.position.y = 0.03;
-    scene.add(centerLine);
-
-    const centerCircle = new THREE.Mesh(
-      new THREE.TorusGeometry(6, 0.1, 8, 48),
-      lineMat
-    );
-    centerCircle.rotation.x = Math.PI / 2;
-    centerCircle.position.y = 0.04;
-    scene.add(centerCircle);
-
-    const borderMat = new THREE.MeshStandardMaterial({ color: 0x223344, roughness: 0.8 });
-    function wall(x, z, sx, sz) {
-      const m = new THREE.Mesh(new THREE.BoxGeometry(sx, 2.5, sz), borderMat);
-      m.position.set(x, 1.25, z);
-      m.castShadow = true;
-      m.receiveShadow = true;
-      scene.add(m);
-    }
-    wall(0, -halfW - 1.2, 90, 2);
-    wall(0,  halfW + 1.2, 90, 2);
-    wall(-halfL - 1.2, 0, 2, 60);
-    wall( halfL + 1.2, 0, 2, 60);
-
-    function makeGoal(x, color) {
-      const g = new THREE.Group();
-      const mat = new THREE.MeshStandardMaterial({ color });
-      const postGeo = new THREE.CylinderGeometry(0.25, 0.25, 4, 12);
-      const barGeo = new THREE.BoxGeometry(8, 0.35, 0.35);
-      const sideGeo = new THREE.BoxGeometry(0.35, 0.35, 4);
-
-      const p1 = new THREE.Mesh(postGeo, mat); p1.position.set(-4, 2, 0);
-      const p2 = new THREE.Mesh(postGeo, mat); p2.position.set(4, 2, 0);
-      const top = new THREE.Mesh(barGeo, mat); top.position.set(0, 4, 0);
-      const s1 = new THREE.Mesh(sideGeo, mat); s1.position.set(-4, 2, -2);
-      const s2 = new THREE.Mesh(sideGeo, mat); s2.position.set(4, 2, -2);
-
-      g.add(p1, p2, top, s1, s2);
-      g.position.set(x, 0, 0);
-      scene.add(g);
-      return g;
-    }
-    makeGoal(-halfL - 0.7, 0x27b8ff);
-    makeGoal( halfL + 0.7, 0xff5d6c);
-
-    function createCar(color) {
-      const g = new THREE.Group();
-
-      const body = new THREE.Mesh(
-        new THREE.BoxGeometry(2.2, 0.7, 3.6),
-        new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.12 })
-      );
-      body.position.y = 0.55;
-      body.castShadow = true;
-      g.add(body);
-
-      const cabin = new THREE.Mesh(
-        new THREE.BoxGeometry(1.6, 0.6, 1.5),
-        new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.35, metalness: 0.05 })
-      );
-      cabin.position.set(0, 1.05, -0.2);
-      cabin.castShadow = true;
-      g.add(cabin);
-
-      const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
-      const wheelGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.28, 14);
-      [[-1.05,0.3,1.4],[1.05,0.3,1.4],[-1.05,0.3,-1.4],[1.05,0.3,-1.4]].forEach(([x,y,z]) => {
-        const w = new THREE.Mesh(wheelGeo, wheelMat);
-        w.rotation.z = Math.PI / 2;
-        w.position.set(x,y,z);
-        w.castShadow = true;
-        g.add(w);
-      });
-
-      g.userData = {
-        vel: new THREE.Vector3(),
-        vy: 0,
-        boost: 100,
-        onGround: true,
-        jumpCD: 0,
-        radius: 1.65
-      };
-
-      scene.add(g);
-      return g;
-    }
-
-    const player = createCar(0x2aa8ff);
-    const ai = createCar(0xff6677);
-    player.position.set(-18, 0, 0);
-    ai.position.set(18, 0, 0);
-    player.rotation.y = Math.PI / 2;
-    ai.rotation.y = -Math.PI / 2;
-
-    const ball = new THREE.Mesh(
-      new THREE.SphereGeometry(1.2, 24, 18),
-      new THREE.MeshStandardMaterial({ color: 0xf2f2f2, roughness: 0.45, metalness: 0.05 })
-    );
-    ball.position.set(0, 1.2, 0);
-    ball.castShadow = true;
-    scene.add(ball);
-
-    const ballVel = new THREE.Vector3();
-
-    const padGeo = new THREE.CylinderGeometry(1.2, 1.2, 0.12, 24);
-    const padMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, emissive: 0x003322, emissiveIntensity: 1 });
-    const pads = [
-      [-30, -18], [-30, 18], [30, -18], [30, 18], [0, -22], [0, 22]
-    ].map(([x, z]) => {
-      const p = new THREE.Mesh(padGeo, padMat.clone());
-      p.rotation.x = Math.PI / 2;
-      p.position.set(x, 0.06, z);
-      scene.add(p);
-      return { mesh: p, x, z, active: true, timer: 0 };
-    });
-
-    const keys = {};
-    addEventListener('keydown', e => {
-      keys[e.key.toLowerCase()] = true;
-      keys[e.code] = true;
-      if (e.code === 'KeyR') resetGame();
-    });
-    addEventListener('keyup', e => {
-      keys[e.key.toLowerCase()] = false;
-      keys[e.code] = false;
-    });
-
-    const scoreEl = document.getElementById('score');
-    const countdownEl = document.getElementById('countdown');
-    const msgEl = document.getElementById('msg');
-    const boostUI = document.getElementById('boostUI');
-
-    let you = 0;
-    let bot = 0;
-    let state = 'countdown';
-    let countdown = 3;
-    let countdownTimer = 0;
-    let kickoffLock = 0;
-    let kickoffDelay = 0.35;
-    let matchResetTimer = 0;
-
-    function setScore() {
-      scoreEl.textContent = `You ${you} - ${bot} AI`;
-    }
-
-    function resetPositions() {
-      player.position.set(-18, 0, 0);
-      ai.position.set(18, 0, 0);
-      player.rotation.y = Math.PI / 2;
-      ai.rotation.y = -Math.PI / 2;
-      player.userData.vel.set(0,0,0);
-      ai.userData.vel.set(0,0,0);
-      player.userData.vy = 0;
-      ai.userData.vy = 0;
-      player.userData.boost = 100;
-      ai.userData.boost = 100;
-      ball.position.set(0, 1.2, 0);
-      ballVel.set(0, 0, 0);
-      kickoffLock = kickoffDelay;
-    }
-
-    function startCountdown(text = '3') {
-      state = 'countdown';
-      countdown = 3;
-      countdownTimer = 0;
-      countdownEl.textContent = text;
-      msgEl.textContent = '';
-      resetPositions();
-    }
-
-    function resetGame() {
-      you = 0;
-      bot = 0;
-      setScore();
-      matchResetTimer = 0;
-      startCountdown('3');
-    }
-
-    function scoreGoal(playerScored) {
-      if (playerScored) {
-        you++;
-        msgEl.textContent = 'You scored!';
-      } else {
-        bot++;
-        msgEl.textContent = 'AI scored!';
-      }
-      setScore();
-      state = 'paused';
-      matchResetTimer = 1.0;
-    }
-
-    function moveCar(car, turn, throttle, boost, jump, dt) {
-      const forward = new THREE.Vector3(Math.sin(car.rotation.y), 0, Math.cos(car.rotation.y));
-      const right = new THREE.Vector3(forward.z, 0, -forward.x);
-
-      car.rotation.y += turn * 2.3 * dt * (0.5 + Math.min(1, car.userData.vel.length() / 10));
-
-      if (throttle !== 0) car.userData.vel.addScaledVector(forward, throttle * 18 * dt);
-
-      if (boost && car.userData.boost > 0) {
-        car.userData.vel.addScaledVector(forward, 28 * dt);
-        car.userData.boost = Math.max(0, car.userData.boost - 20 * dt);
-      } else {
-        car.userData.boost = Math.min(100, car.userData.boost + 10 * dt);
-      }
-
-      const lateral = right.clone().multiplyScalar(car.userData.vel.dot(right));
-      car.userData.vel.addScaledVector(lateral, -0.16);
-
-      car.userData.vel.multiplyScalar(0.985);
-      const maxSpeed = boost ? 30 : 18;
-      if (car.userData.vel.length() > maxSpeed) car.userData.vel.setLength(maxSpeed);
-
-      car.position.addScaledVector(car.userData.vel, dt);
-      car.position.x = THREE.MathUtils.clamp(car.position.x, -halfL + 2, halfL - 2);
-      car.position.z = THREE.MathUtils.clamp(car.position.z, -halfW + 2, halfW - 2);
-
-      car.userData.vy -= 18 * dt;
-      if (jump && car.userData.onGround && car.userData.jumpCD <= 0) {
-        car.userData.vy = 8.5;
-        car.userData.onGround = false;
-        car.userData.jumpCD = 0.35;
-      }
-      if (car.userData.jumpCD > 0) car.userData.jumpCD -= dt;
-
-      car.position.y += car.userData.vy * dt;
-      if (car.position.y <= 0) {
-        car.position.y = 0;
-        car.userData.vy = 0;
-        car.userData.onGround = true;
-      }
-    }
-
-    function playerInput(dt) {
-      const left = keys.a || keys.arrowleft;
-      const right = keys.d || keys.arrowright;
-      const up = keys.w || keys.arrowup;
-      const down = keys.s || keys.arrowdown;
-      const boost = keys.shift || keys.shiftleft || keys.space;
-      const jump = keys.e || keys.enter;
-      moveCar(player, (left ? 1 : 0) + (right ? -1 : 0), (up ? 1 : 0) + (down ? -1 : 0), boost, jump, dt);
-    }
-
-    function aiInput(dt) {
-      const toBall = ball.position.clone().sub(ai.position);
-      const desired = Math.atan2(toBall.x, toBall.z);
-      let delta = desired - ai.rotation.y;
-      delta = Math.atan2(Math.sin(delta), Math.cos(delta));
-
-      const turn = THREE.MathUtils.clamp(delta * 1.8, -1, 1);
-      const throttle = toBall.length() > 3 ? 1 : -0.2;
-      const boost = toBall.length() > 18 && Math.abs(delta) < 0.5 && ai.userData.boost > 10;
-      const jump = ball.position.y > 2.2 && toBall.length() < 6;
-
-      moveCar(ai, turn, throttle, boost, jump, dt);
-    }
-
-    function carBall(car) {
-      const dx = ball.position.x - car.position.x;
-      const dz = ball.position.z - car.position.z;
-      const dist = Math.hypot(dx, dz);
-      const min = car.userData.radius + 1.2;
-      if (dist < min) {
-        const nx = dx / (dist || 1);
-        const nz = dz / (dist || 1);
-        const push = (min - dist) * 0.9;
-        ball.position.x += nx * push;
-        ball.position.z += nz * push;
-        ballVel.addScaledVector(new THREE.Vector3(nx, 0, nz), Math.max(2, car.userData.vel.length() * 0.7));
-      }
-    }
-
-    function updateBoostPads(dt) {
-      pads.forEach(p => {
-        p.mesh.material.emissiveIntensity = p.active ? 1.0 : 0.15;
-        p.mesh.rotation.z += dt * 0.6;
-        if (!p.active) {
-          p.timer -= dt;
-          if (p.timer <= 0) {
-            p.active = true;
-            p.mesh.visible = true;
-          }
-        }
-      });
-
-      function checkPad(car) {
-        pads.forEach(p => {
-          if (!p.active) return;
-          const d = Math.hypot(car.position.x - p.x, car.position.z - p.z);
-          if (d < 1.8) {
-            car.userData.boost = 100;
-            p.active = false;
-            p.timer = 6;
-            p.mesh.visible = false;
-            msgEl.textContent = car === player ? 'Boost pad collected!' : 'AI collected a boost pad!';
-          }
-        });
-      }
-
-      checkPad(player);
-      checkPad(ai);
-    }
-
-    function updateBall(dt) {
-      ball.position.addScaledVector(ballVel, dt);
-      ballVel.multiplyScalar(0.992);
-      ballVel.y -= 18 * dt;
-      ball.position.y += ballVel.y * dt;
-
-      const r = 1.2;
-      if (ball.position.y < r) {
-        ball.position.y = r;
-        ballVel.y *= -0.68;
-      }
-
-      const bounce = 0.82;
-      if (ball.position.x < -halfL + r) { ball.position.x = -halfL + r; ballVel.x *= -bounce; }
-      if (ball.position.x >  halfL - r) { ball.position.x =  halfL - r; ballVel.x *= -bounce; }
-      if (ball.position.z < -halfW + r) { ball.position.z = -halfW + r; ballVel.z *= -bounce; }
-      if (ball.position.z >  halfW - r) { ball.position.z =  halfW - r; ballVel.z *= -bounce; }
-
-      if (Math.abs(ball.position.y) < 1.8 && Math.abs(ball.position.z) < 4) {
-        if (ball.position.x < -halfL + 1.5) scoreGoal(false);
-        if (ball.position.x >  halfL - 1.5) scoreGoal(true);
-      }
-    }
-
-    function chaseCamera() {
-      const back = new THREE.Vector3(Math.sin(player.rotation.y), 0, Math.cos(player.rotation.y));
-      const target = player.position.clone()
-        .addScaledVector(back, -10)
-        .add(new THREE.Vector3(0, 6.5, 0));
-      camera.position.lerp(target, 0.08);
-      camera.lookAt(player.position.x, 1.0, player.position.z);
-    }
-
-    function kickoffCountdown(dt) {
-      countdownTimer += dt;
-      if (countdown === 3 && countdownTimer >= 1) { countdown = 2; countdownEl.textContent = '2'; countdownTimer = 0; }
-      else if (countdown === 2 && countdownTimer >= 1) { countdown = 1; countdownEl.textContent = '1'; countdownTimer = 0; }
-      else if (countdown === 1 && countdownTimer >= 1) {
-        countdown = 0;
-        countdownEl.textContent = 'GO!';
-        countdownTimer = 0;
-        state = 'playing';
-        kickoffLock = 0.35;
-      }
-    }
-
-    function renderBoostText() {
-      boostUI.innerHTML =
-        `<span class="padLegend" style="background:#00ff88"></span>Boost Pads active<br>` +
-        `Your boost: ${Math.floor(player.userData.boost)}%<br>` +
-        `AI boost: ${Math.floor(ai.userData.boost)}%`;
-    }
-
-    const clock = new THREE.Clock();
-    resetPositions();
-    setScore();
-    startCountdown('3');
-
-    function animate() {
-      requestAnimationFrame(animate);
-      const dt = Math.min(clock.getDelta(), 0.033);
-
-      if (state === 'countdown') {
-        kickoffCountdown(dt);
-      } else if (state === 'paused') {
-        matchResetTimer -= dt;
-        if (matchResetTimer <= 0) startCountdown('3');
-      } else if (state === 'playing') {
-        if (kickoffLock > 0) kickoffLock -= dt;
-        else {
-          playerInput(dt);
-          aiInput(dt);
-          carBall(player);
-          carBall(ai);
-          updateBoostPads(dt);
-          updateBall(dt);
-        }
-      }
-
-      chaseCamera();
-      renderBoostText();
-      renderer.render(scene, camera);
-    }
-
-    animate();
-
-    addEventListener('resize', () => {
-      camera.aspect = innerWidth / innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
-  </script>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="text-2xl font-bold text-white mb-4">MyBrand</div>
+                    <p class="text-gray-400">Building amazing websites with modern technology.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="hover:text-white transition">Home</a></li>
+                        <li><a href="#features" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#about" class="hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li>Email: info@example.com</li>
+                        <li>Phone: +1 234 567 890</li>
+                        <li>Location: Sunshine Coast, AU</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.07.876-3.281.919-.641-.657-1.581-1.102-2.61-1.102-2.077 0-3.754 1.677-3.754 3.754 0 .294.033.584.096.866-3.129-.158-5.915-1.657-7.749-3.919-.564.951-.876 2.07-.919 3.281 0 2.077 1.677 3.754 3.754 3.754.294 0 .584-.033.866-.096-1.102 1.581-2.657 2.61-3.919 2.749 0-2.077 1.677-3.754 3.754-3.754 3.129 0 5.915 1.657 7.749 3.919 1.581.951 2.657 1.876 3.919 2.077-.564.951-1.276 1.798-2.165 2.449 1.017-.609 2.07-.876 3.281-.919-2.077 0-3.754-1.677-3.754-3.754 0-.294.033-.584.096-.866 3.129.158 5.915 1.657 7.749 3.919.564-.951.876-2.07.919-3.281 0-2.077-1.677-3.754-3.754-3.754z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.072 3.252.148 4.771 1.691 4.919 4.919.06 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.85-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2026 MyBrand. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
