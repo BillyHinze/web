@@ -5,48 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3D Rocket League Lite</title>
   <style>
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #07111f;
-      font-family: Arial, sans-serif;
-    }
-    #ui {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      color: white;
-      z-index: 10;
-      user-select: none;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-    }
-    #score {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    #help {
-      font-size: 13px;
-      line-height: 1.5;
-      opacity: 0.9;
-      max-width: 420px;
-    }
-    #msg {
-      margin-top: 8px;
-      color: #9df;
-      min-height: 18px;
-    }
-    canvas { display: block; }
+    html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#07111f; font-family:Arial,sans-serif; }
+    canvas { display:block; }
+    #ui { position:fixed; top:12px; left:12px; color:#fff; z-index:10; text-shadow:0 2px 6px rgba(0,0,0,.6); user-select:none; }
+    #score { font-size:22px; font-weight:bold; margin-bottom:8px; }
+    #help { font-size:13px; line-height:1.5; opacity:.95; max-width:420px; }
+    #msg { margin-top:8px; color:#9df; min-height:18px; }
   </style>
-
   <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.3/dist/es-module-shims.js"></script>
   <script type="importmap">
   {
     "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"
     }
   }
   </script>
@@ -55,7 +25,7 @@
   <div id="ui">
     <div id="score">You 0 - 0 AI</div>
     <div id="help">
-      Move: WASD or Arrows<br>
+      Move: W A S D or Arrow Keys<br>
       Boost: Shift or Space<br>
       Jump: E or Enter<br>
       Reset: R
@@ -68,107 +38,72 @@
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x07111f);
-    scene.fog = new THREE.Fog(0x07111f, 35, 130);
 
     const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias:true });
     renderer.setSize(innerWidth, innerHeight);
     renderer.setPixelRatio(devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
-    const ambient = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(ambient);
-
+    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
     const sun = new THREE.DirectionalLight(0xffffff, 2.2);
     sun.position.set(20, 40, 10);
     scene.add(sun);
 
-    const hemi = new THREE.HemisphereLight(0x88bbff, 0x223344, 1.5);
-    scene.add(hemi);
-
-    const fieldSize = 90;
-    const fieldWidth = 60;
-    const halfL = fieldSize / 2;
-    const halfW = fieldWidth / 2;
-
     const ground = new THREE.Mesh(
-      new THREE.PlaneGeometry(fieldSize, fieldWidth),
-      new THREE.MeshStandardMaterial({ color: 0x143a2c, roughness: 1 })
+      new THREE.PlaneGeometry(90, 60),
+      new THREE.MeshStandardMaterial({ color:0x143a2c, roughness:1 })
     );
     ground.rotation.x = -Math.PI / 2;
     scene.add(ground);
 
-    const borderMat = new THREE.MeshStandardMaterial({ color: 0x223344, roughness: 0.8 });
-    function addWall(x, z, sx, sz, sy = 2.5) {
-      const wall = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), borderMat);
-      wall.position.set(x, sy / 2, z);
-      scene.add(wall);
-      return wall;
+    const halfL = 45, halfW = 30;
+    const borderMat = new THREE.MeshStandardMaterial({ color:0x223344, roughness:0.8 });
+    function wall(x, z, sx, sz) {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(sx, 2.5, sz), borderMat);
+      m.position.set(x, 1.25, z);
+      scene.add(m);
     }
-    addWall(0, -halfW - 1.2, fieldSize, 2);
-    addWall(0, halfW + 1.2, fieldSize, 2);
-    addWall(-halfL - 1.2, 0, 2, fieldWidth);
-    addWall(halfL + 1.2, 0, 2, fieldWidth);
-
-    function goal(x, z, color) {
-      const g = new THREE.Group();
-      const mat = new THREE.MeshStandardMaterial({ color });
-      const postGeo = new THREE.CylinderGeometry(0.25, 0.25, 4, 12);
-      const barGeo = new THREE.BoxGeometry(8, 0.35, 0.35);
-      const sideGeo = new THREE.BoxGeometry(0.35, 0.35, 4);
-
-      const p1 = new THREE.Mesh(postGeo, mat); p1.position.set(-4, 2, 0);
-      const p2 = new THREE.Mesh(postGeo, mat); p2.position.set(4, 2, 0);
-      const top = new THREE.Mesh(barGeo, mat); top.position.set(0, 4, 0);
-      const s1 = new THREE.Mesh(sideGeo, mat); s1.position.set(-4, 2, -2);
-      const s2 = new THREE.Mesh(sideGeo, mat); s2.position.set(4, 2, -2);
-      g.add(p1, p2, top, s1, s2);
-      g.position.set(x, 0, z);
-      scene.add(g);
-      return g;
-    }
-    const leftGoal = goal(-halfL - 0.7, 0, 0x27b8ff);
-    const rightGoal = goal(halfL + 0.7, 0, 0xff5d6c);
+    wall(0, -halfW - 1.2, 90, 2);
+    wall(0,  halfW + 1.2, 90, 2);
+    wall(-halfL - 1.2, 0, 2, 60);
+    wall( halfL + 1.2, 0, 2, 60);
 
     function createCar(color) {
-      const group = new THREE.Group();
+      const g = new THREE.Group();
       const body = new THREE.Mesh(
         new THREE.BoxGeometry(2.2, 0.7, 3.6),
-        new THREE.MeshStandardMaterial({ color, metalness: 0.15, roughness: 0.6 })
+        new THREE.MeshStandardMaterial({ color, roughness:0.6 })
       );
       body.position.y = 0.55;
-      group.add(body);
+      g.add(body);
 
       const cabin = new THREE.Mesh(
         new THREE.BoxGeometry(1.6, 0.6, 1.5),
-        new THREE.MeshStandardMaterial({ color: 0xdddddd, metalness: 0.1, roughness: 0.4 })
+        new THREE.MeshStandardMaterial({ color:0xdddddd, roughness:0.4 })
       );
       cabin.position.set(0, 1.05, -0.2);
-      group.add(cabin);
+      g.add(cabin);
 
-      const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
+      const wheelMat = new THREE.MeshStandardMaterial({ color:0x111111 });
       const wheelGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.28, 14);
-      const wheelPos = [
-        [-1.05, 0.3,  1.4], [1.05, 0.3,  1.4],
-        [-1.05, 0.3, -1.4], [1.05, 0.3, -1.4]
-      ];
-      wheelPos.forEach(([x,y,z]) => {
+      [[-1.05,0.3,1.4],[1.05,0.3,1.4],[-1.05,0.3,-1.4],[1.05,0.3,-1.4]].forEach(([x,y,z]) => {
         const w = new THREE.Mesh(wheelGeo, wheelMat);
         w.rotation.z = Math.PI / 2;
         w.position.set(x,y,z);
-        group.add(w);
+        g.add(w);
       });
 
-      group.userData = {
+      g.userData = {
         vel: new THREE.Vector3(),
-        angVel: 0,
-        onGround: true,
+        vy: 0,
         boost: 100,
-        jumpCooldown: 0,
+        onGround: true,
+        jumpCD: 0,
         radius: 1.65
       };
-      scene.add(group);
-      return group;
+      scene.add(g);
+      return g;
     }
 
     const player = createCar(0x2aa8ff);
@@ -180,11 +115,11 @@
 
     const ball = new THREE.Mesh(
       new THREE.SphereGeometry(1.2, 24, 18),
-      new THREE.MeshStandardMaterial({ color: 0xf2f2f2, roughness: 0.45, metalness: 0.05 })
+      new THREE.MeshStandardMaterial({ color:0xf2f2f2, roughness:0.45 })
     );
     ball.position.set(0, 1.2, 0);
     scene.add(ball);
-    let ballVel = new THREE.Vector3();
+    const ballVel = new THREE.Vector3();
 
     const keys = {};
     addEventListener('keydown', e => {
@@ -197,46 +132,36 @@
       keys[e.code] = false;
     });
 
-    function reset(scoredByPlayer = null) {
+    const scoreEl = document.getElementById('score');
+    const msg = document.getElementById('msg');
+    let you = 0, bot = 0;
+
+    function setScore() {
+      scoreEl.textContent = `You ${you} - ${bot} AI`;
+    }
+
+    function reset(note='') {
       player.position.set(-18, 0, 0);
       ai.position.set(18, 0, 0);
       player.rotation.y = Math.PI / 2;
       ai.rotation.y = -Math.PI / 2;
       player.userData.vel.set(0,0,0);
       ai.userData.vel.set(0,0,0);
-      player.userData.angVel = 0;
-      ai.userData.angVel = 0;
+      player.userData.vy = 0;
+      ai.userData.vy = 0;
       player.userData.boost = 100;
       ai.userData.boost = 100;
       ball.position.set(0, 1.2, 0);
       ballVel.set(0,0,0);
-      msg.textContent = scoredByPlayer === true ? 'You scored!' : scoredByPlayer === false ? 'AI scored!' : '';
+      msg.textContent = note;
     }
 
-    let you = 0, bot = 0;
-    const scoreEl = document.getElementById('score');
-    const msg = document.getElementById('msg');
-
-    function setScore() {
-      scoreEl.textContent = `You ${you} - ${bot} AI`;
-    }
-
-    const clock = new THREE.Clock();
-
-    function driveCar(car, inputTurn, inputThrottle, boost, jump, isPlayer = false) {
-      const dt = Math.min(clock.getDelta(), 0.033);
+    function moveCar(car, turn, throttle, boost, jump, dt) {
       const forward = new THREE.Vector3(Math.sin(car.rotation.y), 0, Math.cos(car.rotation.y));
       const right = new THREE.Vector3(forward.z, 0, -forward.x);
 
-      const accel = 18;
-      const turnRate = 2.2;
-      const maxSpeed = boost ? 30 : 18;
-
-      car.rotation.y += inputTurn * turnRate * dt * (Math.max(0.2, car.userData.vel.length() / 8) + 0.4);
-
-      if (inputThrottle !== 0) {
-        car.userData.vel.addScaledVector(forward, inputThrottle * accel * dt);
-      }
+      car.rotation.y += turn * 2.3 * dt * (0.5 + Math.min(1, car.userData.vel.length() / 10));
+      if (throttle !== 0) car.userData.vel.addScaledVector(forward, throttle * 18 * dt);
 
       if (boost && car.userData.boost > 0) {
         car.userData.vel.addScaledVector(forward, 28 * dt);
@@ -245,41 +170,56 @@
         car.userData.boost = Math.min(100, car.userData.boost + 10 * dt);
       }
 
-      car.userData.vel.multiplyScalar(0.985);
-
       const lateral = right.clone().multiplyScalar(car.userData.vel.dot(right));
       car.userData.vel.addScaledVector(lateral, -0.16);
 
+      car.userData.vel.multiplyScalar(0.985);
+      const maxSpeed = boost ? 30 : 18;
       if (car.userData.vel.length() > maxSpeed) car.userData.vel.setLength(maxSpeed);
 
       car.position.addScaledVector(car.userData.vel, dt);
       car.position.x = THREE.MathUtils.clamp(car.position.x, -halfL + 2, halfL - 2);
       car.position.z = THREE.MathUtils.clamp(car.position.z, -halfW + 2, halfW - 2);
 
-      car.position.y = 0;
-      if (car.userData.jumpCooldown > 0) car.userData.jumpCooldown -= dt;
-
-      if (jump && car.userData.onGround && car.userData.jumpCooldown <= 0) {
-        car.userData.vel.y = 8.5;
+      car.userData.vy -= 18 * dt;
+      if (jump && car.userData.onGround && car.userData.jumpCD <= 0) {
+        car.userData.vy = 8.5;
         car.userData.onGround = false;
-        car.userData.jumpCooldown = 0.35;
+        car.userData.jumpCD = 0.35;
       }
+      if (car.userData.jumpCD > 0) car.userData.jumpCD -= dt;
 
-      car.userData.vel.y -= 18 * dt;
-      car.position.y += car.userData.vel.y * dt;
-
+      car.position.y += car.userData.vy * dt;
       if (car.position.y <= 0) {
         car.position.y = 0;
-        car.userData.vel.y = 0;
+        car.userData.vy = 0;
         car.userData.onGround = true;
       }
-
-      const tilt = THREE.MathUtils.clamp(-car.userData.vel.x * 0.03, -0.25, 0.25);
-      car.rotation.z = THREE.MathUtils.lerp(car.rotation.z, tilt, 0.08);
-      car.rotation.x = THREE.MathUtils.lerp(car.rotation.x, THREE.MathUtils.clamp(car.userData.vel.z * 0.01, -0.15, 0.15), 0.08);
     }
 
-    function collidesCarBall(car) {
+    function playerInput(dt) {
+      const left = keys.a || keys.arrowleft;
+      const right = keys.d || keys.arrowright;
+      const up = keys.w || keys.arrowup;
+      const down = keys.s || keys.arrowdown;
+      const boost = keys.shift || keys.shiftleft || keys.space;
+      const jump = keys.e || keys.enter;
+      moveCar(player, (left?1:0) + (right?-1:0), (up?1:0) + (down?-1:0), boost, jump, dt);
+    }
+
+    function aiInput(dt) {
+      const toBall = ball.position.clone().sub(ai.position);
+      const desired = Math.atan2(toBall.x, toBall.z);
+      let delta = desired - ai.rotation.y;
+      delta = Math.atan2(Math.sin(delta), Math.cos(delta));
+      const turn = THREE.MathUtils.clamp(delta * 1.8, -1, 1);
+      const throttle = toBall.length() > 3 ? 1 : -0.2;
+      const boost = toBall.length() > 18 && Math.abs(delta) < 0.5 && ai.userData.boost > 10;
+      const jump = ball.position.y > 2.2 && toBall.length() < 6;
+      moveCar(ai, turn, throttle, boost, jump, dt);
+    }
+
+    function carBall(car) {
       const dx = ball.position.x - car.position.x;
       const dz = ball.position.z - car.position.z;
       const dist = Math.hypot(dx, dz);
@@ -287,14 +227,10 @@
       if (dist < min) {
         const nx = dx / (dist || 1);
         const nz = dz / (dist || 1);
-        const push = (min - dist) * 0.85;
+        const push = (min - dist) * 0.9;
         ball.position.x += nx * push;
         ball.position.z += nz * push;
-
-        const carForward = new THREE.Vector3(Math.sin(car.rotation.y), 0, Math.cos(car.rotation.y));
-        const impulse = Math.max(2, car.userData.vel.length() * 1.2);
-        ballVel.addScaledVector(new THREE.Vector3(nx, 0, nz), impulse * 0.55);
-        ballVel.addScaledVector(carForward, car.userData.vel.dot(carForward) * 0.45);
+        ballVel.addScaledVector(new THREE.Vector3(nx, 0, nz), Math.max(2, car.userData.vel.length() * 0.7));
       }
     }
 
@@ -308,88 +244,44 @@
       if (ball.position.y < r) {
         ball.position.y = r;
         ballVel.y *= -0.68;
-        ballVel.x *= 0.98;
-        ballVel.z *= 0.98;
       }
 
       const bounce = 0.82;
       if (ball.position.x < -halfL + r) { ball.position.x = -halfL + r; ballVel.x *= -bounce; }
-      if (ball.position.x > halfL - r) { ball.position.x = halfL - r; ballVel.x *= -bounce; }
+      if (ball.position.x >  halfL - r) { ball.position.x =  halfL - r; ballVel.x *= -bounce; }
       if (ball.position.z < -halfW + r) { ball.position.z = -halfW + r; ballVel.z *= -bounce; }
-      if (ball.position.z > halfW - r) { ball.position.z = halfW - r; ballVel.z *= -bounce; }
+      if (ball.position.z >  halfW - r) { ball.position.z =  halfW - r; ballVel.z *= -bounce; }
 
-      if (Math.abs(ball.position.y) < 1.6 && Math.abs(ball.position.x) > halfL - 6 && Math.abs(ball.position.z) < 4) {
-        if (ball.position.x < 0) { you++; setScore(); reset(true); }
-        else { bot++; setScore(); reset(false); }
+      if (Math.abs(ball.position.y) < 1.8 && Math.abs(ball.position.z) < 4) {
+        if (ball.position.x < -halfL + 1.5) { bot++; setScore(); reset('AI scored!'); }
+        if (ball.position.x >  halfL - 1.5) { you++; setScore(); reset('You scored!'); }
       }
-
-      ball.rotation.x += 0.02;
-      ball.rotation.z += 0.015;
     }
 
-    function aiBrain(dt) {
-      const target = ball.position.clone();
-      target.y = 0;
-      const toBall = target.clone().sub(ai.position);
-      const desiredAngle = Math.atan2(toBall.x, toBall.z);
-      let delta = desiredAngle - ai.rotation.y;
-      delta = Math.atan2(Math.sin(delta), Math.cos(delta));
-
-      const turn = THREE.MathUtils.clamp(delta * 1.8, -1, 1);
-      const dist = toBall.length();
-      const throttle = dist > 3 ? 1 : -0.2;
-      const boost = dist > 18 && Math.abs(delta) < 0.5 && ai.userData.boost > 10;
-      const jump = dist < 6 && ball.position.y > 2.2;
-
-      driveCar(ai, turn, throttle, boost, jump, false);
-    }
-
-    function controls() {
-      const left = keys['a'] || keys['arrowleft'];
-      const right = keys['d'] || keys['arrowright'];
-      const up = keys['w'] || keys['arrowup'];
-      const down = keys['s'] || keys['arrowdown'];
-      const boost = keys['shift'] || keys['shiftleft'] || keys['space'];
-      const jump = keys['e'] || keys['enter'];
-
-      const turn = (left ? 1 : 0) + (right ? -1 : 0);
-      const throttle = (up ? 1 : 0) + (down ? -1 : 0);
-
-      driveCar(player, turn, throttle, boost, jump, true);
-    }
-
-    function cameraFollow() {
-      const behind = new THREE.Vector3(Math.sin(player.rotation.y), 0, Math.cos(player.rotation.y));
-      const camPos = player.position.clone()
-        .addScaledVector(behind, -10)
+    function chaseCamera() {
+      const back = new THREE.Vector3(Math.sin(player.rotation.y), 0, Math.cos(player.rotation.y));
+      const target = player.position.clone()
+        .addScaledVector(back, -10)
         .add(new THREE.Vector3(0, 6.5, 0));
-      camera.position.lerp(camPos, 0.08);
-      camera.lookAt(player.position.x, 1.1, player.position.z);
+      camera.position.lerp(target, 0.08);
+      camera.lookAt(player.position.x, 1.0, player.position.z);
     }
+
+    const clock = new THREE.Clock();
 
     function animate() {
+      requestAnimationFrame(animate);
       const dt = Math.min(clock.getDelta(), 0.033);
 
-      controls();
-      aiBrain(dt);
+      playerInput(dt);
+      aiInput(dt);
 
-      player.position.y += 0;
-      ai.position.y += 0;
-
-      player.userData.vel.y -= 18 * dt;
-      ai.userData.vel.y -= 18 * dt;
-
-      player.position.y = Math.max(0, player.position.y);
-      ai.position.y = Math.max(0, ai.position.y);
-
-      collidesCarBall(player);
-      collidesCarBall(ai);
+      carBall(player);
+      carBall(ai);
       updateBall(dt);
-
-      cameraFollow();
+      chaseCamera();
 
       renderer.render(scene, camera);
-      requestAnimationFrame(animate);
     }
 
     setScore();
